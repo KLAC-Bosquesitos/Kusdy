@@ -30,4 +30,4 @@ qué especificaste, qué revisaste y qué rechazaste.
     se quitó el paso de SQLite (Kusdy no usa sqflite); la ruta del APK se ajustó a `kusdy/build/...`.
   - Al momento de revisarn no se cambió mayor cosa ya que los directorioes estaban bien indicados.
 - **Verificación:** `dart format`, `flutter analyze` y `flutter test` locales con Flutter 3.44.5; check del PR en verde.
-- **Commit / PR:** <!-- enlace al PR chore/ci -->
+- **Commit / PR:** https://github.com/KLAC-Bosquesitos/Kusdy/pull/12
