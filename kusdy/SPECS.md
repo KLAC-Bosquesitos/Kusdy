@@ -12,7 +12,7 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 |---|---|
 | **Fase actual** | 0. Preparación 🔄 |
 | **Fase siguiente** | 1. Login |
-| **Última actualización** | 2026-10-05 |
+| **Última actualización** | 2026-10-15 |
 | **Bloqueos** | El diseño detallado de la base de datos está en pausa por decisión de Chris. |
 
 ---
@@ -41,9 +41,9 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 - [x] Proyecto Flutter creado (`kusdy/`).
 - [x] Documentación base: `CLAUDE.md`, `AGENTES.md` y este `SPECS.md`.
 - [ ] Preparar el entorno de desarrollo de cada integrante (Flutter, emulador o dispositivo).
-- [ ] Estructura de carpetas por *features* en `lib/` (ver `CLAUDE.md`).
+- [x] Estructura de carpetas por *features* en `lib/` (ver `CLAUDE.md`). Empezó con `features/clientes` y `core/widgets`.
 - [ ] Agregar los paquetes base a `pubspec.yaml`.
-- [ ] Tema y colores en `lib/app/theme.dart` (`KusdyColors`).
+- [x] Tema y colores en `lib/app/theme.dart` (`KusdyColors`).
 - [ ] Proyecto de Supabase de desarrollo.
 - [ ] Tablas, RLS y migraciones SQL. ⛔ *Depende de retomar el diseño de la base de datos.*
 
@@ -72,6 +72,8 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-10-15 | 0 / 2 | Lab S14 · Parte B: lista de clientes (HU-03) con estados cargando, error con Reintentar, vacío y datos; repositorio falso con `Future.delayed`; widgets de estado compartidos; tema `KusdyColors`; pruebas de widget. | @chrisram21 y @WishoSz | #13 |
+| 2026-10-15 | 0 | Lab S14 · Parte A: CI con GitHub Actions, plantilla de PR, `CODEOWNERS`, bitácora de IA y `main` protegida. | Equipo | #12 |
 | 2026-10-05 | 0 | Documentación base: `CLAUDE.md` (contexto), `AGENTES.md` (reglas para agentes) y `SPECS.md` (este archivo). | Chris | — |
 | 2026-10-05 | 0 | Proyecto Flutter inicial creado. | Chris | — |
 
