@@ -17,6 +17,26 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 ---
 
+
+## 2026-10-17 · @kennethram15 / @andrea2507 — Lab S14, Parte B (Inicio con 4 estados)
+
+- **Herramienta:** Claude para la solución inicial y ChatGPT para la revisión técnica y orientación.
+
+- **Especificación:** Implementar la pantalla "Clientes para hoy" (HU-10) con cuatro estados: cargando, error con Reintentar, vacío y datos. Reutilizar los componentes compartidos de la pantalla Clientes, utilizando Riverpod y un repositorio falso debido a que la base de datos todavía no está implementada.
+
+- **Resultado:** Se incorporó la funcionalidad `features/hoy`, incluyendo modelos, repositorio falso, providers, pantalla y cuatro pruebas de widget. Se modificó `app.dart` para que la aplicación inicie en "Clientes para hoy".
+
+- **Aceptado:** Se reutilizaron los widgets `EstadoCargando`, `EstadoError` y `EstadoVacio` para mantener consistencia con la pantalla Clientes. Se conservaron los datos simulados para probar la funcionalidad sin conectarse a una base de datos.
+
+- **Rechazado / corregido:** Se descartó sobrescribir los archivos de documentación existentes al incorporar el ZIP. Se conservaron los avances de los demás integrantes y no se agregaron funcionalidades fuera del alcance del laboratorio.
+
+- **Verificación:** Se probaron los estados cargando, error, vacío y datos en Chrome. Se comprobó el funcionamiento de Reintentar y la navegación a Clientes. Se ejecutaron `flutter analyze` y `flutter test`, con resultados satisfactorios.
+
+- **Commit / PR:** Issue #15. Commit de implementación `8231ef7`. Pendiente agregar el enlace al Pull Request.
+
+---
+
+
 ## 2026-10-15 · @chrisram21 — Lab S14, Parte B (Clientes con 4 estados)
 
 - **Herramienta:** Claude.
