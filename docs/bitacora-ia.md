@@ -17,6 +17,30 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 ---
 
+## 2026-10-15 · @chrisram21 — Lab S14, Parte B (Clientes con 4 estados)
+
+- **Herramienta:** Claude.
+- **Especificación:** pantalla de clientes (HU-03) con cargando, error con Reintentar, vacío con
+  acción y datos, usando `AsyncValue.when`; repositorio que devuelve un `Future` con datos fijos y
+  `Future.delayed` (la base de datos sigue en pausa); reintento automático de Riverpod 3 desactivado;
+  prueba de widget del error con override. Arquitectura por features y colores de `KusdyColors`
+  según `AGENTES.md`. Sin funcionalidades nuevas.
+- **Resultado:** `features/clientes` (dominio, repositorio falso, providers, pantalla), widgets de
+  estado en `core/widgets`, `app/theme.dart` y 4 pruebas de widget.
+- **Aceptado:** Se dejo como estaba la parte del --dart-define para fingir estados mientras no hacemos la conexion a la base de datos y los colores
+- **Rechazado / corregido:**
+  - Se agregó `flutter_riverpod` pero no `riverpod_generator`: para un `FutureProvider` no hace falta
+    generar código todavía.
+- **Verificación:** `dart format`, `flutter analyze` (sin observaciones) y `flutter test` (4 pruebas en
+  verde) con Flutter 3.44.5.
+  Las 4 pruebas mostraron sus respectivos objetivos, la primera fue de carga normal sin ningun estado.
+  La segunda fue una demora en la carga de datos y mostar una pantalla de carga
+  La tercera fue una pantalla de error
+  La cuarta fue en caso de que no hubiera datos que mostrar
+- **Commit / PR:** <!-- enlace al PR de la pareja -->
+
+---
+
 ## 2026-10-15 · @chrisram21 — Lab S14, Parte A (CI)
 
 - **Herramienta:** Claude.
@@ -24,10 +48,10 @@ qué especificaste, qué revisaste y qué rechazaste.
   los archivos de CI a partir de inkash (`s14-06-ci`) con Flutter 3.44.5 y los usuarios del equipo,
   sin hacer commits (los hace el integrante tras revisar).
 - **Resultado:** `ci.yml`, plantilla de PR, `CODEOWNERS`, plantilla de historia de usuario y esta bitácora.
-- **Aceptado:** Solamente se verifico que los directorios utilizados en el ci.yml sean los correctos en base al proyecto y no a inkash, tambien los formatos para los PR y los permisos de los CODEOWNERS
+- **Aceptado:** <!-- Chris: qué dejaste tal cual y por qué -->
 - **Rechazado / corregido:**
   - Respecto a inkash: se agregó `working-directory: kusdy` porque la app vive en una subcarpeta;
     se quitó el paso de SQLite (Kusdy no usa sqflite); la ruta del APK se ajustó a `kusdy/build/...`.
-  - Al momento de revisarn no se cambió mayor cosa ya que los directorioes estaban bien indicados.
+  - <!-- Chris: lo que cambiaste tú al revisar -->
 - **Verificación:** `dart format`, `flutter analyze` y `flutter test` locales con Flutter 3.44.5; check del PR en verde.
-- **Commit / PR:** https://github.com/KLAC-Bosquesitos/Kusdy/pull/12
+- **Commit / PR:** <!-- enlace al PR chore/ci -->
