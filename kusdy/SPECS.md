@@ -1,6 +1,6 @@
 # Kusdy · Specs y avance
 
-Documento vivo para registrar en qué fase va el proyecto, qué se terminó y qué sigue. El contexto general (problema, alcance y decisiones técnicas) está en [`../CLAUDE.md`](../CLAUDE.md) y las reglas para agentes de IA en [`../AGENTES.md`](../AGENTES.md).
+Documento vivo para registrar en qué fase va el proyecto, qué se terminó y qué sigue. El contexto general (problema, decisiones, arquitectura y base de datos) está en [`../CLAUDE.md`](../CLAUDE.md) y las reglas para agentes de IA en [`../AGENTES.md`](../AGENTES.md).
 
 Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloqueado o en pausa
 
@@ -10,59 +10,83 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 
 | | |
 |---|---|
-| **Fase actual** | 0. Preparación 🔄 |
-| **Fase siguiente** | 1. Login |
-| **Última actualización** | 2026-10-15 |
-| **Bloqueos** | El diseño detallado de la base de datos está en pausa por decisión de Chris. |
+| **Fase actual** | 0. Preparación 🔄 (falta conectar la app a Supabase) |
+| **Fase siguiente** | 1. Login y perfiles; en paralelo se pueden construir pantallas de la fase 2 y 3 con repositorios falsos |
+| **Última actualización** | 2026-10-22 |
+| **Bloqueos** | Ninguno para programar. La tabla `productos` es provisional hasta tener los datos reales (afecta a la fase 5). |
 
 ---
 
 ## 2. Fases
 
-> El plan por fases es una **Propuesta** (plan técnico v1). Si cambia, se actualiza aquí y en `CLAUDE.md`.
+> Plan por fases **revisado el 2026-10-22** con la retroalimentación de Freddy (Propuesta). Si cambia, se actualiza aquí y en `CLAUDE.md`.
 
 | # | Fase | Estado | Historias de usuario |
 |---|---|---|---|
 | 0 | Preparación | 🔄 | — |
-| 1 | Login | ⏳ | HU-01 |
-| 2 | Clientes | ⏳ | HU-02, HU-03, HU-04 |
-| 3 | Actividades, historial y agenda | ⏳ | HU-05, HU-06, HU-07 |
-| 4 | Recordatorios y pantalla "Hoy" | ⏳ | HU-08, HU-10 |
-| 5 | Cotizaciones | ⏳ | HU-09 |
-| 6 | Reportes e importación de Excel/CSV | ⏳ | HU-11 |
-| 7 | Despliegue (APK firmado, Play Store) | ⏳ | HU-12 |
-| 8 | Push, offline y onboarding | ⏳ | — |
+| 1 | Login y perfiles | ⏳ | HU-01, HU-17 (solo rol y menús) |
+| 2 | Clientes | 🔄 (lista con datos falsos) | HU-02, HU-03, HU-04, HU-05, HU-13 |
+| 3 | Llamadas y agenda | ⏳ | HU-06, HU-07, HU-10, HU-14 |
+| 4 | Recordatorios | ⏳ | HU-08 |
+| 5 | Productos y ventas | ⏳ | HU-15, HU-18 |
+| 6 | Cotizaciones | ⏳ | HU-09 |
+| 7 | Reportes | ⏳ | HU-11, HU-16 |
+| 8 | Despliegue | ⏳ | HU-12 |
+| 9 | Mejoras (push, offline, onboarding, importar Excel, usuarios desde la app) | ⏳ | HU-17 |
 
 ### Fase 0 · Preparación 🔄
 
-**Objetivo:** dejar listo el repositorio, el proyecto Flutter y el entorno de desarrollo para empezar a construir funcionalidades.
+**Objetivo:** dejar listo el repositorio, el proyecto Flutter, la base de datos y el entorno de desarrollo.
 
-- [x] Repositorio en GitHub.
+- [x] Repositorio en GitHub, CI, plantilla de PR y `CODEOWNERS`.
 - [x] Proyecto Flutter creado (`kusdy/`).
 - [x] Documentación base: `CLAUDE.md`, `AGENTES.md` y este `SPECS.md`.
-- [ ] Preparar el entorno de desarrollo de cada integrante (Flutter, emulador o dispositivo).
-- [x] Estructura de carpetas por *features* en `lib/` (ver `CLAUDE.md`). Empezó con `features/clientes` y `core/widgets`.
-- [ ] Agregar los paquetes base a `pubspec.yaml`.
+- [x] Estructura por *features* en `lib/` (empezó con `features/clientes` y `core/widgets`).
 - [x] Tema y colores en `lib/app/theme.dart` (`KusdyColors`).
-- [ ] Proyecto de Supabase de desarrollo.
-- [ ] Tablas, RLS y migraciones SQL. ⛔ *Depende de retomar el diseño de la base de datos.*
+- [x] Proyecto de Supabase de desarrollo (`kusdy-dev`).
+- [x] Base de datos v2: 17 tablas, 2 vistas, RLS por rol y sucursal, migraciones aplicadas y copiadas a `supabase/migrations/`, pruebas en `supabase/pruebas/`.
+- [ ] `supabase init` y `supabase link` en cada máquina (ver `README.md`).
+- [ ] Crear en el panel el usuario de Freddy, la sucursal `S01` y su perfil `jefe_sucursal`, y ponerlo como `jefe_id` de la sucursal.
+- [ ] Agregar los paquetes base a `pubspec.yaml`: `supabase_flutter`, `go_router`, `intl` (y `freezed`/`json_serializable` si el equipo lo confirma).
+- [ ] Inicializar Supabase en `lib/core/supabase/` con URL y llave publishable (propuesta: `--dart-define`).
+- [ ] Preparar el entorno de desarrollo de cada integrante.
 
 **Criterio de terminado:** cualquier integrante puede clonar el repo, correr `flutter run` y ver la app conectada al Supabase de desarrollo.
 
-### Fase 1 · Login ⏳
+### Fase 1 · Login y perfiles ⏳
 
-**Objetivo:** el vendedor puede iniciar y cerrar sesión con correo y contraseña, la sesión persiste y la app lo redirige al login cuando no hay sesión.
+**Objetivo:** el usuario inicia y cierra sesión con correo y contraseña, la sesión persiste, y la app conoce su rol y sucursal para mostrar solo lo que le corresponde.
 
 - [ ] Pantalla de login.
 - [ ] Inicio y cierre de sesión con Supabase Auth.
 - [ ] Sesión persistente.
-- [ ] Redirección automática con `go_router`.
+- [ ] Redirección automática con `go_router` (sin sesión → login).
+- [ ] Leer el perfil (`perfiles`: nombre, rol, sucursal) y exponerlo con un provider.
+- [ ] Navegación inferior Hoy · Clientes · Agenda · Más; menú "Más" según el rol.
 
-**Criterio de terminado:** pendiente por definir.
+**Criterio de terminado:** Freddy entra con su cuenta, ve su nombre y rol, y al cerrar y abrir la app sigue con sesión.
 
-### Fases 2 a 8 ⏳
+### Fase 2 · Clientes 🔄
 
-Se detallan con tareas y criterio de terminado cuando la fase anterior esté por cerrarse.
+- [x] Lista de clientes con estados cargando, error, vacío y datos (repositorio falso). #13
+- [ ] Repositorio real sobre la vista `clientes_resumen`.
+- [ ] Búsqueda por nombre o teléfono.
+- [ ] Hoja "Filtrar y ordenar" (no contestaron, mes de registro, producto, ciudad; orden por próxima llamada, último contacto o fecha de registro).
+- [ ] Formulario único de crear/editar cliente (solo nombre y teléfono obligatorios).
+- [ ] Detalle del cliente: datos, Llamar/WhatsApp/Mapa, nota fija, tarjeta de Comentarios (crear y editar los propios, "(editado)") e historial de eventos.
+
+### Fase 3 · Llamadas y agenda ⏳
+
+- [ ] Migración aditiva con `registrar_resultado_llamada(...)` y `agenda(dia, vendedor)`.
+- [ ] Widget compartido `TarjetaActividad`.
+- [ ] Pantalla Hoy (se te pasaron, hoy, cuotas atrasadas).
+- [ ] Pantalla dinámica "¿Qué pasó?" después de Hecho, con aviso de llamadas sin respuesta.
+- [ ] Reagendar (Mover) con atajos de fecha.
+- [ ] Agenda por día con filtro por tipo y botón +.
+
+### Fases 4 a 9 ⏳
+
+Se detallan con tareas y criterio de terminado cuando la fase anterior esté por cerrarse. Lo que incluye cada una está en `CLAUDE.md`, "Plan por fases".
 
 ---
 
@@ -73,6 +97,8 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-10-22 | 0 | Contexto actualizado tras la retroalimentación de Freddy: `CLAUDE.md`, `AGENTES.md`, `README.md` y este archivo; migraciones de la BD v2 en `supabase/migrations/`, pruebas SQL, diseño de BD en `docs/bd/` y documentos de referencia en `docs/contexto/`. | Chris (con Claude) | — |
+| 2026-10-22 | 0 | Base de datos v2 diseñada, probada y aplicada en `kusdy-dev` (migraciones `esquema_inicial` y `ajustes_advisors`). | Chris (con Claude) | — |
 | 2026-10-17 | 4 | Lab S14 · Parte B: Inicio "Clientes para hoy" (HU-10) con estados cargando, error con Reintentar, vacío y datos; repositorio falso; navegación a Clientes y pruebas de widget. | @kennethram15 y @andrea2507 | #15 |
 | 2026-10-15 | 0 / 2 | Lab S14 · Parte B: lista de clientes (HU-03) con estados cargando, error con Reintentar, vacío y datos; repositorio falso con `Future.delayed`; widgets de estado compartidos; tema `KusdyColors`; pruebas de widget. | @chrisram21 y @WishoSz | #13 |
 | 2026-10-15 | 0 | Lab S14 · Parte A: CI con GitHub Actions, plantilla de PR, `CODEOWNERS`, bitácora de IA y `main` protegida. | Equipo | #12 |
@@ -84,22 +110,32 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 ## 4. Decisiones tomadas
 
-Registro breve de cada decisión. El detalle vive en `CLAUDE.md`.
+Registro breve de cada decisión. El detalle vive en `CLAUDE.md` y en `../docs/contexto/retro-fredy-2026-10.md`.
 
 | Fecha | Decisión | Estado |
 |---|---|---|
+| 2026-10-22 | 5 roles (instalador, vendedor, jefe de sucursal, supervisor, gerente general); grupo de ventas = sucursal; visibilidad y administración según el rol. Reemplaza "cada vendedor ve solo lo suyo" y "sin roles". | Decisión confirmada (Freddy) |
+| 2026-10-22 | Resultado de llamada como lista cerrada de 8 valores; pantalla dinámica tras "Hecho"; aviso tras 3 llamadas sin respuesta. | Decisión confirmada (Freddy) |
+| 2026-10-22 | Filtros de clientes en lista (no chips); "no contestaron" = última llamada. | Decisión confirmada (Freddy) |
+| 2026-10-22 | Comentarios en tabla propia, editables solo por su autor, con historial de ediciones; nota fija opcional. | Decisión confirmada (Freddy y Chris) |
+| 2026-10-22 | Ventas en GTQ con número por sucursal, crédito en cuotas con seguimiento del vendedor, instalación aparte. | Decisión confirmada (Freddy) |
+| 2026-10-22 | Precio de lista único con bitácora; "hasta en" por periodo; descuentos bajo el "hasta en" y precio de instalación con solicitud al jefe antes de vender. | Decisión confirmada (Freddy y Chris) |
+| 2026-10-22 | Agenda solo por día, con cobros de cuotas. | Decisión confirmada (Freddy) |
+| 2026-10-22 | Reportes por lo cobrado, metas mensuales por sucursal, cierre de mes por el jefe, PDF. | Decisión confirmada (Freddy) |
+| 2026-10-22 | Base de datos v2 aplicada en Supabase de desarrollo; el diseño de la BD deja de estar en pausa. | Decisión confirmada (Chris) |
 | 2026-10-05 | Backend y base de datos en Supabase (PostgreSQL con RLS). | Decisión confirmada |
-| 2026-10-05 | Cada vendedor ve solo sus propios clientes. En la primera etapa solo Freddy usa Kusdy. | Decisión confirmada |
-| 2026-10-05 | El diseño detallado de la base de datos queda en pausa. | Decisión confirmada |
-| — | Arquitectura por *features*, Riverpod, go_router y la paleta de colores. | Propuesta |
+| — | Arquitectura por *features*, Riverpod, go_router, paleta de colores y plan por fases revisado. | Propuesta |
 
 ---
 
 ## 5. Pendientes por definir
 
-Pendientes que bloquean o afectan a las próximas fases. La lista completa está en `CLAUDE.md`.
+Pendientes que afectan a las próximas fases. La lista completa está en `CLAUDE.md`.
 
-- Dispositivos objetivo (Android, iPhone, computadora). Afecta a la fase 7.
+- Datos reales de productos (Chris). Afecta a la fase 5.
+- Visto bueno de Freddy al diseño completo.
 - Diferencia entre cita y visita. Afecta a la fase 3.
-- Si las cotizaciones llevan productos o solo el monto total. Afecta a la fase 5.
-- Datos que salieron de los bocetos: producto de interés del cliente, "instalación" como tipo de actividad y registro de ventas cerradas.
+- Etapas del cliente sin validar con Freddy. Afecta a las fases 2 y 3.
+- Qué llevan las cotizaciones. Afecta a la fase 6.
+- Contenido exacto del reporte mensual. Afecta a la fase 7.
+- Dispositivos objetivo (Android, iPhone, computadora). Afecta a la fase 8.
