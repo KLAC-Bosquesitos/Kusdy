@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../features/clientes/presentation/clientes_screen.dart';
+import '../features/hoy/presentation/hoy_screen.dart';
 import 'theme.dart';
 
 class KusdyApp extends StatelessWidget {
@@ -12,9 +12,9 @@ class KusdyApp extends StatelessWidget {
       title: 'Kusdy',
       debugShowCheckedModeBanner: false,
       theme: kusdyTheme,
-      // Por ahora la app abre directo en Clientes. La navegación con
-      // go_router y las pestañas Hoy · Clientes · Agenda · Más vienen después.
-      home: const ClientesScreen(),
+      // La app abre en Inicio ("Clientes para hoy"); desde ahí se llega a
+      // Clientes. Las pestañas Hoy · Clientes · Agenda · Más vienen después.
+      home: const HoyScreen(),
     );
   }
 }
