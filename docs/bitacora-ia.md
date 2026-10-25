@@ -17,6 +17,21 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 ---
 
+## 2026-10-24 · @kennethram15 / @andrea2507 — Lab S15, Pareja 2 (Agenda con filtros y Deshacer)
+
+- **Herramienta:** ChatGPT para el análisis de los requisitos, la revisión del repositorio y la orientación durante la integración de la funcionalidad.
+
+- **Especificación:** Analizar el laboratorio S15, el documento de planificación, los archivos proporcionados para la Pareja 2 y las indicaciones del equipo. Identificar el procedimiento necesario para integrar la Agenda del día en Kusdy, respetando la arquitectura existente, el flujo de GitHub y el alcance establecido para el laboratorio.
+
+- **Resultado:** Se incorporó la funcionalidad `features/agenda`, organizada en las capas `data`, `domain` y `presentation`. Se integró la pantalla en la navegación inferior de Kusdy y se añadieron filtros reactivos por fecha y tipo de actividad, manejo de los cuatro estados de consulta y cancelación mediante deslizamiento con opción Deshacer. También se incorporaron tres archivos de pruebas de widget.
+
+- **Aceptado:** Se utilizaron los archivos proporcionados para el laboratorio, conservando la arquitectura por funcionalidades y el manejo de estado mediante Riverpod. Se mantuvo el repositorio falso para trabajar sin depender de la conexión a Supabase y se reutilizó la navegación inferior ya implementada por el equipo.
+
+- **Rechazado / corregido:** Se evitó implementar nuevamente la navegación inferior, debido a que ya estaba integrada en `main`. No se realizaron modificaciones a la base de datos ni se incorporaron funcionalidades fuera del alcance del laboratorio, como el registro de nuevas actividades o la conexión real con Supabase. La integración se realizó en una rama independiente para no afectar el trabajo de los demás integrantes.
+
+- **Verificación:** Se revisó el funcionamiento de los filtros por fecha y tipo, la navegación entre días, los estados de consulta, la cancelación de actividades y la opción Deshacer. Se incluyeron pruebas automatizadas para filtros, cancelación y recuperación de actividades. **Resultado de las pruebas:** [Completar con los comandos ejecutados y su resultado real].
+
+- **Commit / PR:** Issue #21. Rama `feat/21-filtro-agenda`. Pull Request pendiente de creación.
 
 ## 2026-10-17 · @kennethram15 / @andrea2507 — Lab S14, Parte B (Inicio con 4 estados)
 

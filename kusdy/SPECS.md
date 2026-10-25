@@ -12,7 +12,7 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 |---|---|
 | **Fase actual** | 0. Preparación 🔄 (falta conectar la app a Supabase) |
 | **Fase siguiente** | 1. Login y perfiles; en paralelo se pueden construir pantallas de la fase 2 y 3 con repositorios falsos |
-| **Última actualización** | 2026-10-22 |
+| **Última actualización** | 2026-10-24 |
 | **Bloqueos** | Ninguno para programar. La tabla `productos` es provisional hasta tener los datos reales (afecta a la fase 5). |
 
 ---
@@ -26,7 +26,7 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 | 0 | Preparación | 🔄 | — |
 | 1 | Login y perfiles | ⏳ | HU-01, HU-17 (solo rol y menús) |
 | 2 | Clientes | 🔄 (lista con datos falsos) | HU-02, HU-03, HU-04, HU-05, HU-13 |
-| 3 | Llamadas y agenda | ⏳ | HU-06, HU-07, HU-10, HU-14 |
+| 3 | Llamadas y agenda | 🔄 (Agenda inicial con repositorio falso) | HU-06, HU-07, HU-10, HU-14 |
 | 4 | Recordatorios | ⏳ | HU-08 |
 | 5 | Productos y ventas | ⏳ | HU-15, HU-18 |
 | 6 | Cotizaciones | ⏳ | HU-09 |
@@ -75,14 +75,15 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 - [ ] Formulario único de crear/editar cliente (solo nombre y teléfono obligatorios).
 - [ ] Detalle del cliente: datos, Llamar/WhatsApp/Mapa, nota fija, tarjeta de Comentarios (crear y editar los propios, "(editado)") e historial de eventos.
 
-### Fase 3 · Llamadas y agenda ⏳
+### Fase 3 · Llamadas y agenda 🔄
 
 - [ ] Migración aditiva con `registrar_resultado_llamada(...)` y `agenda(dia, vendedor)`.
 - [ ] Widget compartido `TarjetaActividad`.
-- [ ] Pantalla Hoy (se te pasaron, hoy, cuotas atrasadas).
+- [ ] Pantalla Hoy completa (se te pasaron, hoy, cuotas atrasadas).
 - [ ] Pantalla dinámica "¿Qué pasó?" después de Hecho, con aviso de llamadas sin respuesta.
 - [ ] Reagendar (Mover) con atajos de fecha.
-- [ ] Agenda por día con filtro por tipo y botón +.
+- [x] Lab S15 · Issue #21: pantalla inicial de Agenda por día, integrada en la navegación inferior. Incluye filtros reactivos por fecha y tipo de actividad mediante Riverpod, estados de carga, error, vacío y datos, cancelación mediante deslizamiento con opción Deshacer y pruebas de widget. Implementación con repositorio falso en memoria.
+- [ ] Completar Agenda con el registro de nuevas actividades mediante el botón +, cobros de cuotas y conexión al repositorio real de Supabase.
 
 ### Fases 4 a 9 ⏳
 
@@ -90,13 +91,13 @@ Se detallan con tareas y criterio de terminado cuando la fase anterior esté por
 
 ---
 
-
 ## 3. Registro de avance
 
 Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-10-24 | 3 | Lab S15 · Pareja 2: implementación de la pantalla Agenda por día, con filtros reactivos por fecha y tipo de actividad mediante Riverpod. Se incorporaron los cuatro estados de consulta (cargando, error, vacío y datos), cancelación de actividades mediante deslizamiento y opción Deshacer. Se utilizó un repositorio falso en memoria y se integraron pruebas de widget. La ejecución general de `flutter test` finalizó con 19 pruebas aprobadas. | @kennethram15 y @andrea2507 | #21 / PR pendiente |
 | 2026-10-22 | 0 | Contexto actualizado tras la retroalimentación de Freddy: `CLAUDE.md`, `AGENTES.md`, `README.md` y este archivo; migraciones de la BD v2 en `supabase/migrations/`, pruebas SQL, diseño de BD en `docs/bd/` y documentos de referencia en `docs/contexto/`. | Chris (con Claude) | — |
 | 2026-10-22 | 0 | Base de datos v2 diseñada, probada y aplicada en `kusdy-dev` (migraciones `esquema_inicial` y `ajustes_advisors`). | Chris (con Claude) | — |
 | 2026-10-17 | 4 | Lab S14 · Parte B: Inicio "Clientes para hoy" (HU-10) con estados cargando, error con Reintentar, vacío y datos; repositorio falso; navegación a Clientes y pruebas de widget. | @kennethram15 y @andrea2507 | #15 |
@@ -106,7 +107,6 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 | 2026-10-05 | 0 | Proyecto Flutter inicial creado. | Chris | — |
 
 ---
-
 
 ## 4. Decisiones tomadas
 
