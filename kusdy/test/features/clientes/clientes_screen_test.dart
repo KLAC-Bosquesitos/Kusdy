@@ -6,17 +6,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kusdy/features/clientes/data/clientes_repository_falso.dart';
 import 'package:kusdy/features/clientes/domain/cliente.dart';
 import 'package:kusdy/features/clientes/domain/clientes_repository.dart';
+import 'package:kusdy/features/clientes/domain/filtro_clientes.dart';
 import 'package:kusdy/features/clientes/presentation/clientes_providers.dart';
 import 'package:kusdy/features/clientes/presentation/clientes_screen.dart';
 
 // Repositorio de prueba: responde lo que cada prueba quiera, sin esperas.
+// Estas pruebas son de los 4 estados; filtrar y borrar tienen las suyas.
 class RepositorioDePrueba implements ClientesRepository {
   RepositorioDePrueba(this.respuesta);
 
   Future<List<Cliente>> Function() respuesta;
 
   @override
-  Future<List<Cliente>> obtenerClientes() => respuesta();
+  Future<List<Cliente>> obtenerClientes(FiltroClientes filtro) => respuesta();
+
+  @override
+  Future<void> eliminarCliente(String id) async {}
+
+  @override
+  Future<void> restaurarCliente(String id) async {}
 }
 
 Widget appCon(ClientesRepository repositorio) {
@@ -53,7 +61,7 @@ void main() {
     expect(find.text('Reintentar'), findsOne);
 
     // Vuelve la conexión y el usuario reintenta.
-    repositorio.respuesta = () async => clientesDeEjemplo;
+    repositorio.respuesta = () async => clientesDeEjemplo();
     await tester.tap(find.text('Reintentar'));
     await tester.pumpAndSettle();
 
@@ -68,7 +76,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOne);
     expect(find.text('Cargando clientes…'), findsOne);
 
-    lectura.complete(clientesDeEjemplo);
+    lectura.complete(clientesDeEjemplo());
     await tester.pumpAndSettle();
 
     expect(find.text('María López'), findsOne);
