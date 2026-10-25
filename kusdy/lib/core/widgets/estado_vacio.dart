@@ -11,12 +11,17 @@ class EstadoVacio extends StatelessWidget {
     required this.mensaje,
     required this.textoAccion,
     required this.onAccion,
+    this.iconoAccion = Icons.add,
   });
 
   final IconData icono;
   final String mensaje;
   final String textoAccion;
   final VoidCallback onAccion;
+
+  // El botón casi siempre agrega algo (+), pero no siempre: "Quitar filtros"
+  // o "Ver todos los clientes" llevan otro ícono.
+  final IconData iconoAccion;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class EstadoVacio extends StatelessWidget {
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: onAccion,
-              icon: const Icon(Icons.add),
+              icon: Icon(iconoAccion),
               label: Text(textoAccion),
               style: FilledButton.styleFrom(
                 minimumSize: const Size(200, 52),

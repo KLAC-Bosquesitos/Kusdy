@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/pestana.dart';
 import '../../../app/theme.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
 import '../../../core/widgets/estado_vacio.dart';
-import '../../clientes/presentation/clientes_screen.dart';
 import '../domain/pendiente_hoy.dart';
 import 'hoy_providers.dart';
 
@@ -27,7 +27,7 @@ class HoyScreen extends ConsumerWidget {
           IconButton(
             tooltip: 'Ver todos los clientes',
             icon: const Icon(Icons.people_outline),
-            onPressed: () => _verClientes(context),
+            onPressed: () => _verClientes(ref),
           ),
         ],
       ),
@@ -44,17 +44,18 @@ class HoyScreen extends ConsumerWidget {
                 icono: Icons.event_available_outlined,
                 mensaje: 'No tienes clientes para hoy.',
                 textoAccion: 'Ver todos los clientes',
-                onAccion: () => _verClientes(context),
+                iconoAccion: Icons.people_outline,
+                onAccion: () => _verClientes(ref),
               )
             : _ListaPendientes(pendientes: lista),
       ),
     );
   }
 
-  void _verClientes(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => const ClientesScreen()));
+  // No se abre una pantalla nueva encima: se cambia la pestaña activa y la
+  // barra inferior sigue visible.
+  void _verClientes(WidgetRef ref) {
+    ref.read(pestanaProvider.notifier).ir(Pestana.clientes);
   }
 }
 
