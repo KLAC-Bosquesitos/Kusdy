@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../features/hoy/presentation/hoy_screen.dart';
+import 'shell.dart';
 import 'theme.dart';
 
 class KusdyApp extends StatelessWidget {
@@ -12,9 +12,8 @@ class KusdyApp extends StatelessWidget {
       title: 'Kusdy',
       debugShowCheckedModeBanner: false,
       theme: kusdyTheme,
-      // La app abre en Inicio ("Clientes para hoy"); desde ahí se llega a
-      // Clientes. Las pestañas Hoy · Clientes · Agenda · Más vienen después.
-      home: const HoyScreen(),
+      // La app abre en la barra inferior, con la pestaña Hoy activa.
+      home: const KusdyShell(),
     );
   }
 }

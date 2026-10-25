@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kusdy/app/pestana.dart';
 import 'package:kusdy/features/hoy/data/hoy_repository_falso.dart';
 import 'package:kusdy/features/hoy/domain/hoy_repository.dart';
 import 'package:kusdy/features/hoy/domain/pendiente_hoy.dart';
@@ -70,5 +71,13 @@ void main() {
 
     expect(find.text('No tienes clientes para hoy.'), findsOne);
     expect(find.text('Ver todos los clientes'), findsOne);
+
+    // El botón no abre otra pantalla: cambia la pestaña activa.
+    final contenedor = ProviderScope.containerOf(
+      tester.element(find.byType(HoyScreen)),
+    );
+    await tester.tap(find.text('Ver todos los clientes'));
+    await tester.pump();
+    expect(contenedor.read(pestanaProvider), Pestana.clientes);
   });
 }
