@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'shell.dart';
+import 'puerta_sesion.dart';
 import 'theme.dart';
 
 class KusdyApp extends StatelessWidget {
@@ -12,8 +12,8 @@ class KusdyApp extends StatelessWidget {
       title: 'Kusdy',
       debugShowCheckedModeBanner: false,
       theme: kusdyTheme,
-      // La app abre en la barra inferior, con la pestaña Hoy activa.
-      home: const KusdyShell(),
+      // Sin sesión abre el login; con sesión, la barra con la pestaña Hoy.
+      home: const PuertaSesion(),
     );
   }
 }
