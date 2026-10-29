@@ -75,3 +75,16 @@ qué especificaste, qué revisaste y qué rechazaste.
   - <!-- Chris: lo que cambiaste tú al revisar -->
 - **Verificación:** `dart format`, `flutter analyze` y `flutter test` locales con Flutter 3.44.5; check del PR en verde.
 - **Commit / PR:** <!-- enlace al PR chore/ci -->
+
+
+## 2026-10-29 · @chrisram21 — Lab S16, Parte A (Login)
+
+- **Herramienta:** Claude.
+- **Especificación:** Lee el archivo y reparte la actividad en dos partes para divinirnos en dos parejas como hemos venido haciendo, vamos a utilizar supabase y el ingeniero ya esta enterado de ello entonces continua.
+- **Resultado:** `ci.yml`, plantilla de PR, `CODEOWNERS`, plantilla de historia de usuario y esta bitácora.
+- **Aceptado:** Las migraciones de supabase para crear el login
+- **Rechazado / corregido:**
+  - Respecto a inkash: se agregó `working-directory: kusdy` porque la app vive en una subcarpeta;
+    se quitó el paso de SQLite (Kusdy no usa sqflite); la ruta del APK se ajustó a `kusdy/build/...`.
+- **Verificación:** `dart format`, `flutter analyze` y `flutter test` locales con Flutter 3.44.5; check del PR en verde.
+- **Commit / PR:** <!-- enlace al PR chore/ci -->

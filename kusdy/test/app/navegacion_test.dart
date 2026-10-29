@@ -3,11 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kusdy/app/app.dart';
 import 'package:kusdy/app/pestana.dart';
+import 'package:kusdy/features/auth/data/auth_repository_falso.dart';
+import 'package:kusdy/features/auth/presentation/auth_providers.dart';
 
-// La app completa con sus repositorios falsos de siempre. pumpAndSettle
-// avanza el reloj de la prueba hasta que terminan los Future.delayed.
+// La app completa con sus repositorios falsos de siempre y una sesión ya
+// iniciada (sin Supabase). pumpAndSettle avanza el reloj de la prueba hasta
+// que terminan los Future.delayed.
 Future<ProviderContainer> abrirApp(WidgetTester tester) async {
-  await tester.pumpWidget(const ProviderScope(child: KusdyApp()));
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        authRepositoryProvider.overrideWithValue(
+          AuthRepositoryFalso(conSesion: true),
+        ),
+      ],
+      child: const KusdyApp(),
+    ),
+  );
   await tester.pumpAndSettle();
   return ProviderScope.containerOf(tester.element(find.byType(KusdyApp)));
 }
@@ -43,7 +55,7 @@ void main() {
 
     await tocarPestana(tester, 'Más');
     expect(contenedor.read(pestanaProvider), Pestana.mas);
-    expect(find.text('Próximamente'), findsOne);
+    expect(find.widgetWithText(AppBar, 'Más'), findsOne);
 
     await tocarPestana(tester, 'Hoy');
     expect(find.widgetWithText(AppBar, 'Clientes para hoy'), findsOne);
