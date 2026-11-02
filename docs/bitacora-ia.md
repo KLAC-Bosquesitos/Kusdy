@@ -89,9 +89,7 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Verificación:** `dart format`, `flutter analyze` y `flutter test` locales con Flutter 3.44.5; check del PR en verde.
 - **Commit / PR:** <!-- enlace al PR chore/ci -->
 
-## 2026-11-1 · @wishosz — Lab S16, Parte B (Migracion)
-
-## 2026-11-01 · @<tu-usuario> / @<pareja> — Lab S16, Parte B (Categorías conectadas a Supabase)
+## 2026-11-1 · @wishosz — Lab S16, Parte B (Migracion de categorías)
 
 - **Herramienta:** Claude.
 - **Especificación:** Implementar `CategoriasRepositorySupabase` sobre la tabla `categorias_producto` (migración 4) cumpliendo el contrato `CategoriasRepository` sin tocar las pantallas.
