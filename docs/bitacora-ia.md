@@ -17,6 +17,22 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 ---
 
+## 2026-11-01 · @Kennethram15 / @Andrea2507 — Lab S16, Parte B (CRUD de categorías)
+
+- **Herramienta:** ChatGPT para el análisis del repositorio, la planificación de la integración y la revisión de instrucciones. [Agregar otra herramienta de IA utilizada, si corresponde.]
+
+- **Especificación:** Revisar los archivos de la pareja 2 para integrar el CRUD de categorías de productos sin afectar las funcionalidades existentes. Mantener la arquitectura por features, Riverpod, los repositorios definidos, el tema KusdyColors y las pruebas de widget. Respetar la migración y los archivos de la pareja 1.
+
+- **Resultado:** Se preparó la integración de CategoriasScreen, CategoriaFormScreen y categoriasProvider, con navegación desde Más, operaciones de creación, edición, archivado y eliminación, estados de consulta y ocho pruebas de widget.
+
+- **Aceptado:** [Indicar los componentes que efectivamente quedaron integrados y por qué se conservaron.]
+
+- **Rechazado / corregido:** Se evitó duplicar el repositorio de categorías y modificar las migraciones existentes. [Agregar las correcciones reales realizadas tras revisar código o pruebas.]
+
+- **Verificación:** [Registrar resultados reales de dart format, flutter analyze y flutter test. Indicar si se probó en emulador y si se verificó la persistencia en Supabase.]
+
+- **Commit / PR:** Issue #26 · [Agregar el enlace al PR correspondiente.]
+
 
 ## 2026-10-17 · @kennethram15 / @andrea2507 — Lab S14, Parte B (Inicio con 4 estados)
 
