@@ -30,11 +30,17 @@ create trigger categorias_producto_actualizado before update on categorias_produ
   for each row execute function tocar_actualizado_en();
 
 -- 2. Pasar los datos: una categoría por cada texto distinto que ya existía.
+--    Si un mismo nombre está escrito de varias formas ("Servicios" y
+--    "servicios "), se queda la forma que usan más productos; si empatan, la
+--    que empieza con mayúscula. COLLATE "C" hace que ese desempate sea igual
+--    en cualquier servidor: con el orden alfabético del idioma (en_US, es_GT)
+--    la minúscula va primero, y el resultado cambiaría según dónde corra.
 insert into categorias_producto (nombre)
 select distinct on (lower(trim(categoria))) trim(categoria)
   from productos
  where categoria is not null and trim(categoria) <> ''
- order by lower(trim(categoria)), trim(categoria);
+ group by trim(categoria)
+ order by lower(trim(categoria)), count(*) desc, trim(categoria) collate "C";
 
 -- 3. Cada producto apunta a su categoría. ON DELETE RESTRICT: la base no deja
 --    borrar una categoría que todavía tiene productos.

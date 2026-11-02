@@ -97,5 +97,5 @@ qué especificaste, qué revisaste y qué rechazaste.
   eliminar), función `traducirErrorCategoria` y 4 pruebas unitarias de esa traducción.
 - **Aceptado:** Contar las categorias en la misma consulta, validaciones para vacios y el definir al provider como unico punto de cambio.
 - **Rechazado / corregido:** Una correción fue definir que cuando se desee eliminar una categoría indique la cantidad de productos con los que se encuentran en uso. Además decidí no se borrar `categorias_repository_memoria.dart` porque sigue sirviendo para pruebas y para trabajar sin red.
-- **Verificación:** `flutter analyze` sin observaciones; `flutter test test/features/productos` con 4 pruebas positivas.
-- **Commit / PR:** <!-- Pendiente jiji -->
+- **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde; prueba de migración (`supabase/pruebas/20_migracion_categorias.sql`) en verde en el job "Migraciones de la base" del CI. El CI encontró que la migración elegía el nombre de la categoría según el orden alfabético del servidor; se corrigió para que dé lo mismo en cualquier Postgres.
+- **Commit / PR:** #28
