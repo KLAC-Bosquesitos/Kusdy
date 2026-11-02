@@ -104,7 +104,7 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 | 2026-10-15 | 0 | Lab S14 · Parte A: CI con GitHub Actions, plantilla de PR, `CODEOWNERS`, bitácora de IA y `main` protegida. | Equipo | #12 |
 | 2026-10-05 | 0 | Documentación base: `CLAUDE.md` (contexto), `AGENTES.md` (reglas para agentes) y `SPECS.md` (este archivo). | Chris | — |
 | 2026-10-05 | 0 | Proyecto Flutter inicial creado. | Chris | — |
-
+| 2026-11-01 | 5 | Lab S16 · Migración 4: categorías de producto en su propia tabla, con prueba de migración en el CI (Postgres 17) y repositorio de Supabase. | @chrisram21 y @WishoSz | #28 |
 ---
 
 
