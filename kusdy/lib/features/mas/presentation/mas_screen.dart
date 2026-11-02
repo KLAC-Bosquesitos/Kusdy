@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/theme.dart';
 import '../../../core/widgets/proximamente.dart';
 import '../../auth/presentation/auth_providers.dart';
+import '../../productos/presentation/categorias_screen.dart';
 
 // Pestaña "Más": lo que no cabe en la barra (catálogo, reportes, usuarios) y
 // cerrar sesión. Cada opción abre su pantalla encima, con flecha para volver;
@@ -25,12 +26,7 @@ class MasScreen extends ConsumerWidget {
           const _Opcion(
             icono: Icons.category_outlined,
             titulo: 'Categorías de productos',
-            // Lab S16: la pareja de las pantallas cambia esto por
-            // CategoriasScreen().
-            destino: PantallaProximamente(
-              titulo: 'Categorías de productos',
-              icono: Icons.category_outlined,
-            ),
+            destino: CategoriasScreen(),
           ),
           const _Opcion(
             icono: Icons.inventory_2_outlined,
