@@ -47,6 +47,43 @@ jobs:
       - name: Pruebas (flutter test)
         run: flutter test --reporter expanded
 
+  # Lab S16: prueba de migraciones de Supabase sobre un Postgres de verdad.
+  # Arma la base como estaba antes, le aplica la migración nueva y revisa
+  # que los datos sigan (supabase/pruebas/20_migracion_categorias.sql).
+  migraciones:
+    name: Migraciones de la base
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Supabase usa Postgres 17.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    # Este job trabaja desde la raíz del repo, no desde kusdy/.
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Base vacía
+        run: createdb kusdy_migracion
+
+      - name: Prueba de la migración de categorías
+        run: psql -v ON_ERROR_STOP=1 -d kusdy_migracion -f supabase/pruebas/20_migracion_categorias.sql
+
   apk:
     name: APK de prueba
     needs: calidad # solo si la calidad pasó
