@@ -28,7 +28,7 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 | 2 | Clientes | 🔄 (lista con datos falsos) | HU-02, HU-03, HU-04, HU-05, HU-13 |
 | 3 | Llamadas y agenda | ⏳ | HU-06, HU-07, HU-10, HU-14 |
 | 4 | Recordatorios | ⏳ | HU-08 |
-| 5 | Productos y ventas | ⏳ | HU-15, HU-18 |
+| 5 | Productos y ventas | 🔄 (CRUD de categorías de producto; productos y ventas pendientes) | HU-15, HU-18 |
 | 6 | Cotizaciones | ⏳ | HU-09 |
 | 7 | Reportes | ⏳ | HU-11, HU-16 |
 | 8 | Despliegue | ⏳ | HU-12 |
@@ -97,6 +97,7 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-11-01 | 5 | Lab S16 · Pareja 2: CRUD de categorías de productos con lista, formulario para crear y editar, archivado, eliminación controlada, integración desde Más, estados de consulta y ocho pruebas de widget. | @Kennethram15 y @Andrea2507 | #26 · PR #N |
 | 2026-10-22 | 0 | Contexto actualizado tras la retroalimentación de Freddy: `CLAUDE.md`, `AGENTES.md`, `README.md` y este archivo; migraciones de la BD v2 en `supabase/migrations/`, pruebas SQL, diseño de BD en `docs/bd/` y documentos de referencia en `docs/contexto/`. | Chris (con Claude) | — |
 | 2026-10-22 | 0 | Base de datos v2 diseñada, probada y aplicada en `kusdy-dev` (migraciones `esquema_inicial` y `ajustes_advisors`). | Chris (con Claude) | — |
 | 2026-10-17 | 4 | Lab S14 · Parte B: Inicio "Clientes para hoy" (HU-10) con estados cargando, error con Reintentar, vacío y datos; repositorio falso; navegación a Clientes y pruebas de widget. | @kennethram15 y @andrea2507 | #15 |
