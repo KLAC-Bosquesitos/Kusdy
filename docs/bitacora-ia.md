@@ -88,3 +88,16 @@ qué especificaste, qué revisaste y qué rechazaste.
     se quitó el paso de SQLite (Kusdy no usa sqflite); la ruta del APK se ajustó a `kusdy/build/...`.
 - **Verificación:** `dart format`, `flutter analyze` y `flutter test` locales con Flutter 3.44.5; check del PR en verde.
 - **Commit / PR:** <!-- enlace al PR chore/ci -->
+
+## 2026-11-1 · @wishosz — Lab S16, Parte B (Migracion)
+
+## 2026-11-01 · @<tu-usuario> / @<pareja> — Lab S16, Parte B (Categorías conectadas a Supabase)
+
+- **Herramienta:** Claude.
+- **Especificación:** Implementar `CategoriasRepositorySupabase` sobre la tabla `categorias_producto` (migración 4) cumpliendo el contrato `CategoriasRepository` sin tocar las pantallas.
+- **Resultado:** repositorio Supabase (listar con conteo de productos, crear, renombrar, archivar y
+  eliminar), función `traducirErrorCategoria` y 4 pruebas unitarias de esa traducción.
+- **Aceptado:** Contar las categorias en la misma consulta, validaciones para vacios y el definir al provider como unico punto de cambio.
+- **Rechazado / corregido:** Una correción fue definir que cuando se desee eliminar una categoría indique la cantidad de productos con los que se encuentran en uso. Además decidí no se borrar `categorias_repository_memoria.dart` porque sigue sirviendo para pruebas y para trabajar sin red.
+- **Verificación:** `flutter analyze` sin observaciones; `flutter test test/features/productos` con 4 pruebas positivas.
+- **Commit / PR:** <!-- Pendiente jiji -->
