@@ -4,25 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kusdy/app/pestana.dart';
-import 'package:kusdy/features/hoy/data/hoy_repository_falso.dart';
-import 'package:kusdy/features/hoy/domain/hoy_repository.dart';
-import 'package:kusdy/features/hoy/domain/pendiente_hoy.dart';
-import 'package:kusdy/features/hoy/presentation/hoy_providers.dart';
+import 'package:kusdy/features/agenda/data/actividades_repository_falso.dart';
+import 'package:kusdy/features/agenda/domain/actividad_agenda.dart';
+import 'package:kusdy/features/agenda/presentation/agenda_providers.dart';
 import 'package:kusdy/features/hoy/presentation/hoy_screen.dart';
 
-// Repositorio de prueba: responde lo que cada prueba quiera, sin esperas.
-class HoyDePrueba implements HoyRepository {
-  HoyDePrueba(this.respuesta);
+// Responde lo que cada prueba quiera en pendientesDeHoy.
+class HoyDePrueba extends ActividadesRepositoryFalso {
+  HoyDePrueba(this.respuesta) : super(demora: Duration.zero);
 
-  Future<List<PendienteHoy>> Function() respuesta;
+  Future<List<ActividadAgenda>> Function() respuesta;
 
   @override
-  Future<List<PendienteHoy>> obtenerPendientesDeHoy() => respuesta();
+  Future<List<ActividadAgenda>> pendientesDeHoy() => respuesta();
 }
 
-Widget pantallaCon(HoyRepository repositorio) {
+Widget pantallaCon(HoyDePrueba repositorio) {
   return ProviderScope(
-    overrides: [hoyRepositoryProvider.overrideWithValue(repositorio)],
+    overrides: [actividadesRepositoryProvider.overrideWithValue(repositorio)],
     child: const MaterialApp(home: HoyScreen()),
   );
 }
@@ -46,20 +45,20 @@ void main() {
     await tester.pumpWidget(pantallaCon(repositorio));
     await tester.pumpAndSettle();
 
-    repositorio.respuesta = () async => pendientesDeEjemplo;
+    repositorio.respuesta = () async => actividadesDeEjemplo();
     await tester.tap(find.text('Reintentar'));
     await tester.pumpAndSettle();
 
-    expect(find.text('María López'), findsOne);
+    expect(find.text('María López'), findsWidgets);
   });
 
   testWidgets('cargando -> datos', (tester) async {
-    final lectura = Completer<List<PendienteHoy>>();
+    final lectura = Completer<List<ActividadAgenda>>();
     await tester.pumpWidget(pantallaCon(HoyDePrueba(() => lectura.future)));
 
     expect(find.text('Revisando tu día…'), findsOne);
 
-    lectura.complete(pendientesDeEjemplo);
+    lectura.complete(actividadesDeEjemplo());
     await tester.pumpAndSettle();
 
     expect(find.text('Hotel Los Altos'), findsOne);
@@ -72,7 +71,6 @@ void main() {
     expect(find.text('No tienes clientes para hoy.'), findsOne);
     expect(find.text('Ver todos los clientes'), findsOne);
 
-    // El botón no abre otra pantalla: cambia la pestaña activa.
     final contenedor = ProviderScope.containerOf(
       tester.element(find.byType(HoyScreen)),
     );

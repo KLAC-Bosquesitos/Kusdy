@@ -5,8 +5,9 @@ import '../../../app/pestana.dart';
 import '../../../app/theme.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
+import '../../../core/utils/fechas.dart';
 import '../../../core/widgets/estado_vacio.dart';
-import '../domain/pendiente_hoy.dart';
+import '../../agenda/domain/actividad_agenda.dart';
 import 'hoy_providers.dart';
 
 // HU-10 · Inicio "Clientes para hoy" (boceto 1). Los 4 estados de una lectura:
@@ -62,7 +63,7 @@ class HoyScreen extends ConsumerWidget {
 class _ListaPendientes extends StatelessWidget {
   const _ListaPendientes({required this.pendientes});
 
-  final List<PendienteHoy> pendientes;
+  final List<ActividadAgenda> pendientes;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class _ListaPendientes extends StatelessWidget {
 class _TarjetaPendiente extends StatelessWidget {
   const _TarjetaPendiente({required this.pendiente});
 
-  final PendienteHoy pendiente;
+  final ActividadAgenda pendiente;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class _TarjetaPendiente extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Text(
-          pendiente.hora,
+          hora(pendiente.programadaPara),
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -104,7 +105,8 @@ class _TarjetaPendiente extends StatelessWidget {
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
-          '${pendiente.motivo}\n${pendiente.telefono}',
+          '${pendiente.tipo.texto} · ${pendiente.descripcion}\n'
+          '${pendiente.telefono}',
           style: const TextStyle(
             fontSize: 15,
             color: KusdyColors.textoSecundario,

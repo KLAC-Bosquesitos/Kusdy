@@ -5,12 +5,15 @@ import 'package:kusdy/app/app.dart';
 import 'package:kusdy/features/auth/data/auth_repository_falso.dart';
 import 'package:kusdy/features/auth/presentation/auth_providers.dart';
 
+import '../../helpers/repositorios_falsos.dart';
+
 // La app completa, sin sesión y con la sesión falsa (sin Supabase).
 Future<void> abrirSinSesion(WidgetTester tester) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
         authRepositoryProvider.overrideWithValue(AuthRepositoryFalso()),
+        ...repositoriosFalsos(),
       ],
       child: const KusdyApp(),
     ),
