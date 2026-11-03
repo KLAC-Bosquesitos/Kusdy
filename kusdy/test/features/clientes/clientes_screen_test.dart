@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kusdy/features/clientes/data/clientes_repository_falso.dart';
 import 'package:kusdy/features/clientes/domain/cliente.dart';
 import 'package:kusdy/features/clientes/domain/clientes_repository.dart';
+import 'package:kusdy/features/clientes/domain/datos_cliente.dart';
 import 'package:kusdy/features/clientes/domain/filtro_clientes.dart';
 import 'package:kusdy/features/clientes/presentation/clientes_providers.dart';
 import 'package:kusdy/features/clientes/presentation/clientes_screen.dart';
@@ -19,6 +20,16 @@ class RepositorioDePrueba implements ClientesRepository {
 
   @override
   Future<List<Cliente>> obtenerClientes(FiltroClientes filtro) => respuesta();
+
+  @override
+  Future<Cliente> obtenerCliente(String id) => throw UnimplementedError();
+
+  @override
+  Future<String> crearCliente(DatosCliente datos) => throw UnimplementedError();
+
+  @override
+  Future<void> actualizarCliente(String id, DatosCliente datos) =>
+      throw UnimplementedError();
 
   @override
   Future<void> eliminarCliente(String id) async {}

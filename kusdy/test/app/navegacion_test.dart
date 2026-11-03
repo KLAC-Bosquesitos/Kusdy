@@ -6,6 +6,8 @@ import 'package:kusdy/app/pestana.dart';
 import 'package:kusdy/features/auth/data/auth_repository_falso.dart';
 import 'package:kusdy/features/auth/presentation/auth_providers.dart';
 
+import '../helpers/repositorios_falsos.dart';
+
 // La app completa con sus repositorios falsos de siempre y una sesión ya
 // iniciada (sin Supabase). pumpAndSettle avanza el reloj de la prueba hasta
 // que terminan los Future.delayed.
@@ -16,6 +18,7 @@ Future<ProviderContainer> abrirApp(WidgetTester tester) async {
         authRepositoryProvider.overrideWithValue(
           AuthRepositoryFalso(conSesion: true),
         ),
+        ...repositoriosFalsos(),
       ],
       child: const KusdyApp(),
     ),

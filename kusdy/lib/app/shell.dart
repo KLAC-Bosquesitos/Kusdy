@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/mas/presentation/mas_screen.dart';
-import '../core/widgets/proximamente.dart';
 import '../features/agenda/presentation/agenda_screen.dart';
 import '../features/clientes/presentation/clientes_screen.dart';
 import '../features/hoy/presentation/hoy_screen.dart';
@@ -27,7 +26,6 @@ class KusdyShell extends ConsumerWidget {
           ClientesScreen(),
           AgendaScreen(),
           MasScreen(),
-          PantallaProximamente(titulo: 'Más', icono: Icons.menu),
         ],
       ),
       bottomNavigationBar: NavigationBar(

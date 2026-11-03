@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kusdy/core/utils/fechas.dart';
-import 'package:kusdy/features/agenda/data/agenda_repository_falso.dart';
+import 'package:kusdy/features/agenda/data/actividades_repository_falso.dart';
 import 'package:kusdy/features/agenda/domain/actividad_agenda.dart';
 import 'package:kusdy/features/agenda/domain/filtro_agenda.dart';
 import 'package:kusdy/features/agenda/presentation/agenda_providers.dart';
 import 'package:kusdy/features/agenda/presentation/agenda_screen.dart';
 
-Widget pantallaCon(AgendaRepositoryFalso repositorio) {
+Widget pantallaCon(ActividadesRepositoryFalso repositorio) {
   return ProviderScope(
-    overrides: [agendaRepositoryProvider.overrideWithValue(repositorio)],
+    overrides: [actividadesRepositoryProvider.overrideWithValue(repositorio)],
     child: const MaterialApp(home: AgendaScreen()),
   );
 }
@@ -34,7 +34,7 @@ Future<void> dejarPasar(WidgetTester tester) async {
 // reloj real: con el reloj de la prueba, el Future.delayed nunca terminaría.
 Future<List<ActividadAgenda>> consultarBase(
   WidgetTester tester,
-  AgendaRepositoryFalso repositorio,
+  ActividadesRepositoryFalso repositorio,
 ) async {
   final hoy = FiltroAgenda(dia: soloDia(DateTime.now()));
   final actividades = await tester.runAsync(
@@ -47,7 +47,7 @@ void main() {
   testWidgets('deslizar cancela en la base y Deshacer la regresa idéntica', (
     tester,
   ) async {
-    final repositorio = AgendaRepositoryFalso(demora: Duration.zero);
+    final repositorio = ActividadesRepositoryFalso(demora: Duration.zero);
     await tester.pumpWidget(pantallaCon(repositorio));
     await tester.pumpAndSettle();
     expect(find.text('Hotel Los Altos'), findsOne);
@@ -75,7 +75,7 @@ void main() {
   });
 
   testWidgets('si la base falla al cancelar, la fila vuelve', (tester) async {
-    final repositorio = AgendaRepositoryFalso(
+    final repositorio = ActividadesRepositoryFalso(
       modo: ModoAgenda.fallaBorrar,
       demora: Duration.zero,
     );

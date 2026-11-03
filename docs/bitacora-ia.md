@@ -115,3 +115,13 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** Una correción fue definir que cuando se desee eliminar una categoría indique la cantidad de productos con los que se encuentran en uso. Además decidí no se borrar `categorias_repository_memoria.dart` porque sigue sirviendo para pruebas y para trabajar sin red.
 - **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde; prueba de migración (`supabase/pruebas/20_migracion_categorias.sql`) en verde en el job "Migraciones de la base" del CI. El CI encontró que la migración elegía el nombre de la categoría según el orden alfabético del servidor; se corrigió para que dé lo mismo en cualquier Postgres.
 - **Commit / PR:** #28
+
+## 2026-11-3 · @chrisram21 — Sprint 3 base comun
+
+- **Herramienta:** Claude.
+- **Especificación:** Crear la base dentro del repositorio para que ambas parejas puedan trabajar simultaneamente sin merge conflicts y poder crear las funcione que hagan falta.
+- **Resultado:** correccion de repositorios falsos a los reales y correccion de contratos faltantes.
+- **Aceptado:** Cambios dentro de los archivos de repositorios para que se unifiquen ciertas aspectos de la aplicacion y tambien dentro de los dominios.
+- **Rechazado / corregido:** No hubo tantas correcciones ya que solo se trata de dejar de usar los repositorios falsos y usar los verdaderos ademas de plantar las bases.
+- **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
+- **Commit / PR:** #29

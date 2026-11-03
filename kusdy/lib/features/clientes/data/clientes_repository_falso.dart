@@ -1,5 +1,6 @@
 import '../domain/cliente.dart';
 import '../domain/clientes_repository.dart';
+import '../domain/datos_cliente.dart';
 import '../domain/filtro_clientes.dart';
 
 // Cómo se comporta el repositorio falso. Se elige al correr la app:
@@ -36,7 +37,7 @@ class ClientesRepositoryFalso implements ClientesRepository {
     this.modo = ModoFalso.normal,
     List<Cliente>? clientes,
     this.demora = const Duration(milliseconds: 1200),
-  }) : _clientes = clientes ?? clientesDeEjemplo();
+  }) : _clientes = [...(clientes ?? clientesDeEjemplo())];
 
   final ModoFalso modo;
   final Duration demora;
@@ -60,6 +61,54 @@ class ClientesRepositoryFalso implements ClientesRepository {
     return _clientes
         .where((c) => !_eliminados.contains(c.id) && _cumple(c, filtro))
         .toList();
+  }
+
+  @override
+  Future<Cliente> obtenerCliente(String id) async {
+    await Future.delayed(demora ~/ 3);
+    return _clientes.firstWhere(
+      (c) => c.id == id && !_eliminados.contains(id),
+      orElse: () => throw const ClienteException('Ese cliente ya no existe.'),
+    );
+  }
+
+  @override
+  Future<String> crearCliente(DatosCliente datos) async {
+    await Future.delayed(demora ~/ 3);
+    final id = 'nuevo-${_clientes.length + 1}';
+    _clientes.insert(0, _desdeDatos(id, datos, DateTime.now()));
+    return id;
+  }
+
+  @override
+  Future<void> actualizarCliente(String id, DatosCliente datos) async {
+    await Future.delayed(demora ~/ 3);
+    final i = _clientes.indexWhere((c) => c.id == id);
+    if (i == -1) throw const ClienteException('Ese cliente ya no existe.');
+    final antes = _clientes[i];
+    _clientes[i] = _desdeDatos(id, datos, antes.registradoEl, antes);
+  }
+
+  Cliente _desdeDatos(
+    String id,
+    DatosCliente d,
+    DateTime registradoEl, [
+    Cliente? antes,
+  ]) {
+    return Cliente(
+      id: id,
+      nombre: d.nombre,
+      telefono: d.telefono,
+      direccion: d.direccion,
+      ciudad: d.ciudad,
+      notaFija: d.notaFija,
+      registradoEl: registradoEl,
+      producto: antes?.producto,
+      ultimoContacto: antes?.ultimoContacto,
+      proximaLlamada: antes?.proximaLlamada ?? d.primeraLlamada,
+      noContesto: antes?.noContesto ?? false,
+      intentosSinRespuesta: antes?.intentosSinRespuesta ?? 0,
+    );
   }
 
   @override
@@ -106,6 +155,8 @@ List<Cliente> clientesDeEjemplo([DateTime? hoy]) {
       nombre: 'María López',
       telefono: '5512 3456',
       producto: 'Calentador solar 200 L',
+      ciudad: 'Quetzaltenango',
+      notaFija: 'Prefiere que la llamen después de las 5 p. m.',
       registradoEl: haceMeses(0, 1),
     ),
     Cliente(
@@ -120,7 +171,10 @@ List<Cliente> clientesDeEjemplo([DateTime? hoy]) {
       nombre: 'Hotel Los Altos',
       telefono: '7761 2030',
       producto: 'Calentador solar 300 L',
+      ciudad: 'Quetzaltenango',
       registradoEl: haceMeses(1, 14),
+      noContesto: true,
+      intentosSinRespuesta: 3,
     ),
     Cliente(
       id: '4',

@@ -1,13 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/clientes_repository_falso.dart';
+import '../data/comentarios_repository_falso.dart';
 import '../domain/cliente.dart';
 import '../domain/clientes_repository.dart';
+import '../domain/comentarios_repository.dart';
 import '../domain/filtro_clientes.dart';
 
 // Qué repositorio usa la app. Las pruebas lo reemplazan con overrideWithValue.
 final clientesRepositoryProvider = Provider<ClientesRepository>((ref) {
   return ClientesRepositoryFalso(modo: ModoFalso.desdeEntorno());
+});
+
+final comentariosRepositoryProvider = Provider<ComentariosRepository>((ref) {
+  return ComentariosRepositoryFalso();
 });
 
 // El filtro activo. Cada método reemplaza el filtro por uno nuevo.

@@ -1,14 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/fechas.dart';
-import '../data/agenda_repository_falso.dart';
+import '../data/actividades_repository_falso.dart';
 import '../domain/actividad_agenda.dart';
-import '../domain/agenda_repository.dart';
+import '../domain/actividades_repository.dart';
 import '../domain/filtro_agenda.dart';
 
-// Qué repositorio usa la app. Las pruebas lo reemplazan con overrideWithValue.
-final agendaRepositoryProvider = Provider<AgendaRepository>((ref) {
-  return AgendaRepositoryFalso(modo: ModoAgenda.desdeEntorno());
+// Único punto donde se elige el repositorio de actividades (Hoy y Agenda).
+// Las pruebas lo reemplazan con overrideWithValue.
+final actividadesRepositoryProvider = Provider<ActividadesRepository>((ref) {
+  return ActividadesRepositoryFalso(modo: ModoAgenda.desdeEntorno());
 });
 
 // El filtro activo. Empieza en hoy, con todos los tipos. Cada método
@@ -45,13 +46,13 @@ class AgendaNotifier extends AsyncNotifier<List<ActividadAgenda>> {
   @override
   Future<List<ActividadAgenda>> build() {
     final filtro = ref.watch(filtroAgendaProvider);
-    return ref.watch(agendaRepositoryProvider).obtenerActividades(filtro);
+    return ref.watch(actividadesRepositoryProvider).obtenerActividades(filtro);
   }
 
   // Paso 1: primero se cancela en la base. Si falla, lanza el error y la
   // pantalla deja la fila donde estaba.
   Future<void> cancelarEnBase(String id) {
-    return ref.read(agendaRepositoryProvider).cancelarActividad(id);
+    return ref.read(actividadesRepositoryProvider).cancelarActividad(id);
   }
 
   // Paso 2: la base ya la canceló; se quita de la lista en pantalla sin
@@ -67,7 +68,7 @@ class AgendaNotifier extends AsyncNotifier<List<ActividadAgenda>> {
 
   // Deshacer: vuelve a pendiente en la base y se consulta de nuevo.
   Future<void> reactivar(String id) async {
-    await ref.read(agendaRepositoryProvider).reactivarActividad(id);
+    await ref.read(actividadesRepositoryProvider).reactivarActividad(id);
     ref.invalidateSelf();
   }
 }

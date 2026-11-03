@@ -2,6 +2,20 @@
 
 CRM móvil a medida para Energica Solar S.A., hecho en Flutter con Supabase como backend. Centraliza clientes, llamadas, citas, visitas, ventas y seguimientos para que a los vendedores no se les pase nada.
 
+## El problema
+
+Freddy es jefe de sucursal en Energica Solar (calentadores solares, Quetzaltenango) y atiende más de 100 clientes al mes. Hoy lleva el seguimiento entre Excel, una agenda de papel y su memoria. Cuando se le pasa una llamada, se pierde una venta: *"Si se me pasa algo representa una pérdida."*
+
+Kusdy le muestra al abrir **a quién llamar hoy** (y lo que se le pasó), le deja registrar en dos toques **qué pasó** en cada llamada y agenda lo siguiente para que aparezca en **Hoy** y en la **Agenda**. Cada cliente tiene su detalle con **comentarios** para saber qué se habló la última vez.
+
+## Capturas
+
+<!-- Agregar al cerrar el sprint: Hoy, Clientes, Detalle del cliente, "¿Qué pasó?" y Agenda. -->
+
+| Hoy | Clientes | Detalle | ¿Qué pasó? | Agenda |
+|---|---|---|---|---|
+| | | | | |
+
 ## Documentación
 
 | Archivo | Para qué sirve |
@@ -11,6 +25,8 @@ CRM móvil a medida para Energica Solar S.A., hecho en Flutter con Supabase como
 | [`AGENTES.md`](AGENTES.md) | Reglas para los agentes de IA que trabajen en el proyecto. |
 | [`docs/bd/diseno-bd-v2.md`](docs/bd/diseno-bd-v2.md) | Diseño de la base de datos y permisos. |
 | [`docs/contexto/`](docs/contexto/) | Retroalimentación de Freddy, contexto de negocio, bocetos y paleta. |
+| [`docs/adr/`](docs/adr/) | Decisiones de arquitectura. |
+| [`docs/usuarios.md`](docs/usuarios.md) | Pruebas con usuarios y qué cambió por ellas. |
 
 ## Estructura
 
@@ -21,11 +37,23 @@ CRM móvil a medida para Energica Solar S.A., hecho en Flutter con Supabase como
 
 ## Cómo correr la app
 
+Requiere Flutter 3.44.5.
+
 ```bash
 cd kusdy
 flutter pub get
 flutter run
 ```
+
+La app se conecta sola al Supabase de desarrollo (`kusdy-dev`). Para entrar hace falta una cuenta: pídanla al equipo (las contraseñas no se guardan en el repo).
+
+**Sin compilar:** cada PR y cada push a `main` genera un APK de prueba. En GitHub → *Actions* → la corrida de `main` → *Artifacts* → `kusdy-apk-…`. Se descomprime y se instala en Android.
+
+**Pruebas:** `flutter test` (app) y, para la base, `psql -d <base_vacia> -f supabase/pruebas/20_migracion_categorias.sql` (el CI corre las pruebas de migración de `supabase/pruebas/`).
+
+## Arquitectura en una línea
+
+Pantalla → provider (Riverpod) → contrato del repositorio → Supabase. Las pantallas nunca llaman a Supabase directo. Decisiones en [`docs/adr/`](docs/adr/) y pruebas con usuarios en [`docs/usuarios.md`](docs/usuarios.md).
 
 ## Base de datos (Supabase de desarrollo)
 

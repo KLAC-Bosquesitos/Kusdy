@@ -16,25 +16,48 @@ enum TipoActividad {
 
 enum EstadoActividad { pendiente, completada, cancelada }
 
-// Una actividad en la Agenda del día: qué hay que hacer, con quién y a qué
-// hora. Modelo mínimo; cuando se conecte Supabase saldrá de la función
-// agenda(dia, vendedor).
+// Una actividad de Hoy o de la Agenda: qué hay que hacer, con quién y cuándo.
 class ActividadAgenda {
   const ActividadAgenda({
     required this.id,
+    required this.clienteId,
     required this.cliente,
     required this.telefono,
     required this.tipo,
     required this.programadaPara,
     required this.descripcion,
     this.estado = EstadoActividad.pendiente,
+    this.intentosSinRespuesta = 0,
   });
 
   final String id;
+  final String clienteId;
   final String cliente;
   final String telefono;
   final TipoActividad tipo;
   final DateTime programadaPara;
   final String descripcion;
   final EstadoActividad estado;
+
+  // Llamadas seguidas sin respuesta del cliente (aviso a partir de 3).
+  final int intentosSinRespuesta;
+
+  // Pendiente de un día anterior: va en "Se te pasaron".
+  bool vencida(DateTime ahora) =>
+      estado == EstadoActividad.pendiente &&
+      programadaPara.isBefore(DateTime(ahora.year, ahora.month, ahora.day));
+
+  ActividadAgenda copiar({EstadoActividad? estado, DateTime? programadaPara}) {
+    return ActividadAgenda(
+      id: id,
+      clienteId: clienteId,
+      cliente: cliente,
+      telefono: telefono,
+      tipo: tipo,
+      programadaPara: programadaPara ?? this.programadaPara,
+      descripcion: descripcion,
+      estado: estado ?? this.estado,
+      intentosSinRespuesta: intentosSinRespuesta,
+    );
+  }
 }

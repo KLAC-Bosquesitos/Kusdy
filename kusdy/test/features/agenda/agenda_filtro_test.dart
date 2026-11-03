@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kusdy/features/agenda/data/agenda_repository_falso.dart';
+import 'package:kusdy/features/agenda/data/actividades_repository_falso.dart';
 import 'package:kusdy/features/agenda/presentation/agenda_providers.dart';
 import 'package:kusdy/features/agenda/presentation/agenda_screen.dart';
 
@@ -16,8 +16,8 @@ Future<void> abrirAgenda(WidgetTester tester) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        agendaRepositoryProvider.overrideWithValue(
-          AgendaRepositoryFalso(demora: Duration.zero),
+        actividadesRepositoryProvider.overrideWithValue(
+          ActividadesRepositoryFalso(demora: Duration.zero),
         ),
       ],
       child: const MaterialApp(home: AgendaScreen()),
