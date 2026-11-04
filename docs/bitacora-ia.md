@@ -125,3 +125,13 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** No hubo tantas correcciones ya que solo se trata de dejar de usar los repositorios falsos y usar los verdaderos ademas de plantar las bases.
 - **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
 - **Commit / PR:** #29
+
+## 2026-11-3 · @wishosz — Clientes desde Supabase
+
+- **Herramienta:** Claude.
+- **Especificación:** Crear el repositorio y archivos correspondientes para traer los clientes desde la base de datos de supabase. Estos se mostratan en la pantalla de Clientes, mostrados como los datos de ejemplo.
+- **Resultado:** La pantalla de clientes trae los clientes reales guardados en la base de Supabase.
+- **Aceptado:** Creación de 3 archivos nuevos para gestionar el repositorio de clientes y comentarios. Además de editar el provider de estos para que si tome los repositorios de Supabase.
+- **Rechazado / corregido:** Fue bastante lineal, como la pantalla de los usuarios ya existia entonces la incorporación de los repositorios desde Supabase no causó mayor problema.
+- **Verificación:** `flutter analyze` sin observaciones o alertas; En `flutter test` pasaron todas las pruebas. Además de una prueba manual donde se ve que los clientes son los guardados en la base de Supabase.
+- **Commit / PR:** #37
