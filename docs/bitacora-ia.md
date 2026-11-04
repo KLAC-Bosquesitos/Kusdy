@@ -134,5 +134,5 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Aceptado:** La parte del codigo que muestra los clientes como widgets.
 - **Rechazado / corregido:** Hubiera correcciones en la parte del layout y de la paleta de colores.
 - **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
-- **Commit / PR:** #37
+- **Commit / PR:** #36
 
