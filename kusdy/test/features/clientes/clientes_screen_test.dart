@@ -100,7 +100,7 @@ void main() {
 
     expect(find.text('Aún no tienes clientes.'), findsOne);
     await tester.tap(find.text('Agregar cliente'));
-    await tester.pump();
-    expect(find.text('Muy pronto podrás agregar clientes.'), findsOne);
+    await tester.pumpAndSettle();
+    expect(find.text('Nuevo cliente'), findsOne);
   });
 }

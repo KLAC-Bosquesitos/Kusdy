@@ -97,6 +97,7 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-11-03 | 2 | Formulario único para crear y editar clientes, detalle con Llamar/WhatsApp y tarjeta de Comentarios; pruebas de lógica y de pantalla. | @chrisram21 y @WishoSz | #37 |
 | 2026-11-03 | 2 / 3 | Sprint 3 · base común: contratos de clientes, comentarios y actividades; ADR; README con el problema; plantilla de pruebas con usuarios. | @chrisram21 | #29 |
 | 2026-11-01 | 5 | Lab S16 · Pareja 2: CRUD de categorías de productos con lista, formulario para crear y editar, archivado, eliminación controlada, integración desde Más, estados de consulta y ocho pruebas de widget. | @Kennethram15 y @Andrea2507 | #26 · PR #N |
 | 2026-10-22 | 0 | Contexto actualizado tras la retroalimentación de Freddy: `CLAUDE.md`, `AGENTES.md`, `README.md` y este archivo; migraciones de la BD v2 en `supabase/migrations/`, pruebas SQL, diseño de BD en `docs/bd/` y documentos de referencia en `docs/contexto/`. | Chris (con Claude) | — |

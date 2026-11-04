@@ -7,6 +7,8 @@ import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
 import '../../../core/widgets/estado_vacio.dart';
 import '../domain/cliente.dart';
+import 'cliente_detalle_screen.dart';
+import 'cliente_form_screen.dart';
 import 'clientes_providers.dart';
 
 // HU-03 · Consultar clientes y HU-13 · Filtrar clientes (por ahora búsqueda y
@@ -25,6 +27,11 @@ class ClientesScreen extends ConsumerWidget {
         title: const Text('Clientes'),
         backgroundColor: KusdyColors.superficie,
         foregroundColor: KusdyColors.primarioOscuro,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _agregarCliente(context, ref),
+        icon: const Icon(Icons.person_add_alt_1),
+        label: const Text('Nuevo', style: TextStyle(fontSize: 17)),
       ),
       body: Column(
         children: [
@@ -65,7 +72,7 @@ class ClientesScreen extends ConsumerWidget {
                   icono: Icons.people_outline,
                   mensaje: 'Aún no tienes clientes.',
                   textoAccion: 'Agregar cliente',
-                  onAccion: () => _agregarCliente(context),
+                  onAccion: () => _agregarCliente(context, ref),
                 );
               },
             ),
@@ -75,10 +82,16 @@ class ClientesScreen extends ConsumerWidget {
     );
   }
 
-  // El formulario de cliente (bocetos 5 y 6) es otra historia de usuario.
-  void _agregarCliente(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Muy pronto podrás agregar clientes.')),
+  Future<void> _agregarCliente(BuildContext context, WidgetRef ref) {
+    return Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ClienteFormScreen(
+          alGuardar: (datos) async {
+            await ref.read(clientesRepositoryProvider).crearCliente(datos);
+            ref.invalidate(clientesProvider);
+          },
+        ),
+      ),
     );
   }
 }
@@ -179,7 +192,7 @@ class _ListaClientes extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
       itemCount: clientes.length,
       separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (_, i) {
@@ -312,6 +325,11 @@ class _TarjetaCliente extends StatelessWidget {
         side: const BorderSide(color: KusdyColors.borde),
       ),
       child: ListTile(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => ClienteDetalleScreen(clienteId: cliente.id),
+          ),
+        ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: CircleAvatar(
           backgroundColor: KusdyColors.primarioSuave,
