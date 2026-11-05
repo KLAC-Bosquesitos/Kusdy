@@ -65,9 +65,9 @@ void main() {
 
     // Vuelve la misma actividad: mismo id, mismos datos y en su hora.
     expect(find.byKey(const ValueKey('a2')), findsOne);
-    expect(find.text('11:30'), findsOne);
+    expect(find.text('11:30 · Visita'), findsOne);
     expect(
-      find.text('Visita · Visita técnica para medir el techo\n7761 2030'),
+      find.text('Visita técnica para medir el techo\n7761 2030'),
       findsOne,
     );
     final restauradas = await consultarBase(tester, repositorio);

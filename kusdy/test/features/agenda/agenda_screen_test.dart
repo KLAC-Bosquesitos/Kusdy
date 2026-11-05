@@ -21,7 +21,7 @@ void main() {
 
     await tester.pumpAndSettle();
     expect(find.textContaining('Hoy ·'), findsOne);
-    expect(find.text('09:00'), findsOne);
+    expect(find.text('09:00 · Llamada'), findsOne);
     expect(find.text('María López'), findsOne);
   });
 

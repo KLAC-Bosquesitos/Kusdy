@@ -97,6 +97,7 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-11-04 | 3 | Sprint 3 · PR 2.2: pantalla dinámica «¿Qué pasó?», reagendamiento con atajos, tarjeta compartida de actividades y sección «Se te pasaron» en Hoy. Pruebas de lógica y widgets aprobadas; validación con Supabase pendiente. | @Andrea2507 y @Kennethram15 | Issue #34 · PR #N |
 | 2026-11-03 | 2 | Clientes desde Supabase: lista con filtro en el servidor, crear, editar, borrar con Deshacer y comentarios; pruebas de datos. | @WishoSz y @chrisram21 | #37 |
 | 2026-11-03 | 2 | Formulario único para crear y editar clientes, detalle con Llamar/WhatsApp y tarjeta de Comentarios; pruebas de lógica y de pantalla. | @chrisram21 y @WishoSz | #37 |
 | 2026-11-03 | 2 / 3 | Sprint 3 · base común: contratos de clientes, comentarios y actividades; ADR; README con el problema; plantilla de pruebas con usuarios. | @chrisram21 | #29 |

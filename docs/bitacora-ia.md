@@ -16,6 +16,22 @@ qué especificaste, qué revisaste y qué rechazaste.
 | Commit / PR | Enlace |
 
 ---
+## 2026-11-04 · @Andrea2507 / @Kennethram15 — Sprint 3, PR 2.2 (Pantalla «¿Qué pasó?» y Mover)
+
+- **Herramienta:** ChatGPT para analizar las instrucciones del Sprint 3, orientar la integración de los archivos, verificar los resultados de las pruebas y apoyar la documentación del trabajo realizado.
+
+- **Especificación:** Incorporar las funcionalidades del PR 2.2, correspondientes a la pantalla dinámica «¿Qué pasó?», el reagendamiento de actividades y la presentación de llamadas pendientes y vencidas. Respetar la arquitectura por features, los contratos de repositorios, Riverpod, la paleta KusdyColors y las funcionalidades existentes de Hoy y Agenda.
+
+- **Resultado:** Se incorporaron en la rama `feat/que-paso` las pantallas y componentes relacionados con el registro de resultados de llamadas, los atajos para reagendar actividades, las tarjetas compartidas de Hoy y Agenda y las pruebas de lógica y widgets correspondientes.
+
+- **Aceptado:** Se mantuvo la separación entre presentación, lógica y acceso a datos. Se reutilizaron los providers y contratos existentes, evitando consultas directas a Supabase desde las pantallas. Se conservaron las funcionalidades anteriores de Hoy y Agenda, incluyendo los estados de consulta y la cancelación de actividades.
+
+- **Rechazado / corregido:** Se evitó modificar archivos ajenos al PR, agregar dependencias innecesarias y sobrescribir los avances de otros integrantes. El archivo ZIP original se mantuvo fuera del repositorio para no incluirlo accidentalmente en el commit. Se habilitó el modo de desarrollador de Windows para permitir la preparación de los plugins requeridos por Flutter.
+
+- **Verificación:** Se ejecutó `dart format --output=none --set-exit-if-changed lib test`, sin modificaciones. `flutter analyze` terminó sin observaciones y `flutter test` finalizó con 73 pruebas aprobadas. Se confirmó que `pubspec.lock` no presentó modificaciones. La comprobación del flujo completo con Supabase y las pruebas manuales en un dispositivo permanecen pendientes.
+
+- **Commit / PR:** Issue #34. PR pendiente de creación.
+
 
 ## 2026-11-01 · @Kennethram15 / @Andrea2507 — Lab S16, Parte B (CRUD de categorías)
 
