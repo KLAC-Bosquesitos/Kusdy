@@ -26,6 +26,7 @@ class RegistroLlamada {
     this.comentario,
     this.siguienteTipo,
     this.siguienteFecha,
+    this.productoInteresId,
   });
 
   final String actividadId;
@@ -33,4 +34,7 @@ class RegistroLlamada {
   final String? comentario;
   final TipoActividad? siguienteTipo;
   final DateTime? siguienteFecha;
+
+  // Si viene, se guarda como producto de interés del cliente.
+  final String? productoInteresId;
 }

@@ -9,6 +9,7 @@ class OpcionesResultado {
     this.tipo,
     this.dias,
     this.pideFecha = true,
+    this.pideProducto = false,
   });
 
   final String pregunta;
@@ -19,6 +20,9 @@ class OpcionesResultado {
 
   // false: el resultado cierra el seguimiento (no se ofrece fecha).
   final bool pideFecha;
+
+  // Si el cliente mostró interés, se pregunta en qué producto.
+  final bool pideProducto;
 }
 
 OpcionesResultado opcionesPara(ResultadoLlamada r) {
@@ -32,21 +36,25 @@ OpcionesResultado opcionesPara(ResultadoLlamada r) {
       pregunta: '¿Cuándo le das seguimiento?',
       tipo: TipoActividad.llamada,
       dias: 3,
+      pideProducto: true,
     ),
     ResultadoLlamada.pidioCotizacion => const OpcionesResultado(
       pregunta: '¿Cuándo confirmas que recibió la cotización?',
       tipo: TipoActividad.seguimiento,
       dias: 1,
+      pideProducto: true,
     ),
     ResultadoLlamada.agendoVisita => const OpcionesResultado(
       pregunta: '¿Cuándo es la visita?',
       tipo: TipoActividad.visita,
       dias: 1,
+      pideProducto: true,
     ),
     ResultadoLlamada.compro => const OpcionesResultado(
       pregunta: '¿Cuándo es la instalación?',
       tipo: TipoActividad.instalacion,
       dias: 7,
+      pideProducto: true,
     ),
     // "No le interesa" = perdido, pero se puede volver a intentar.
     ResultadoLlamada.noInteresado => const OpcionesResultado(

@@ -2,6 +2,7 @@ import '../domain/cliente.dart';
 import '../domain/clientes_repository.dart';
 import '../domain/datos_cliente.dart';
 import '../domain/filtro_clientes.dart';
+import '../../productos/data/productos_interes_repository_falso.dart';
 
 // Cómo se comporta el repositorio falso. Se elige al correr la app:
 //   flutter run --dart-define=CLIENTES_MODO=lento
@@ -103,7 +104,11 @@ class ClientesRepositoryFalso implements ClientesRepository {
       ciudad: d.ciudad,
       notaFija: d.notaFija,
       registradoEl: registradoEl,
-      producto: antes?.producto,
+      productoId: d.productoInteresId,
+      producto: productosDeEjemplo
+          .where((p) => p.id == d.productoInteresId)
+          .firstOrNull
+          ?.nombre,
       ultimoContacto: antes?.ultimoContacto,
       proximaLlamada: antes?.proximaLlamada ?? d.primeraLlamada,
       noContesto: antes?.noContesto ?? false,

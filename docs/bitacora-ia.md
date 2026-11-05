@@ -166,6 +166,7 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** Fue bastante lineal, como la pantalla de los usuarios ya existia entonces la incorporación de los repositorios desde Supabase no causó mayor problema.
 - **Verificación:** `flutter analyze` sin observaciones o alertas; En `flutter test` pasaron todas las pruebas. Además de una prueba manual donde se ve que los clientes son los guardados en la base de Supabase.
 - **Commit / PR:** #37
+
 ## 2026-11-3 · @chrisram21 Co-authored-by: WishoSz — Formulario y detalle del cliente
 
 - **Herramienta:** Claude.
@@ -176,3 +177,12 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
 - **Commit / PR:** #36
 
+## 2026-11-4 · @chrisram21 Co-authored-by: WishoSz — Fixes de formularios, pantallas y documentacion
+
+- **Herramienta:** Claude.
+- **Especificación:** Las pantallas de clientes no mostraban la opcion de marcar el producto en el que estaban interesados, eso ademas de terminar con la documentacion pendiente
+- **Resultado:** Un combobox dentro de la pantlla de "Agrega cliente" y "¿Que paso?"
+- **Aceptado:** Se acepto una migracion a base de datos con respecto a una funcion para cargar los datos al mismo tiempo que se crea un cliente o se hace una actualizacion de una cita 
+- **Rechazado / corregido:** Hubieron correcciones al momento de realizar la documentacion faltante
+- **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
+- **Commit / PR:** #40

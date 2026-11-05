@@ -52,6 +52,17 @@ void main() {
     expect(p['p_siguiente_fecha'], endsWith('Z'));
   });
 
+  test('parametrosDeRegistro manda p_producto solo si se eligió', () {
+    RegistroLlamada con(String? producto) => RegistroLlamada(
+      actividadId: 'a1',
+      resultado: ResultadoLlamada.interesado,
+      productoInteresId: producto,
+    );
+
+    expect(parametrosDeRegistro(con('p200'))['p_producto'], 'p200');
+    expect(parametrosDeRegistro(con(null)).containsKey('p_producto'), isFalse);
+  });
+
   test('cada ResultadoLlamada existe en el enum de Postgres', () {
     const enPostgres = {
       'no_contesto',

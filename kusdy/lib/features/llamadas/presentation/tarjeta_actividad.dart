@@ -5,6 +5,7 @@ import '../../../app/theme.dart';
 import '../../../core/utils/fechas.dart';
 import '../../../core/utils/telefono.dart';
 import '../../agenda/domain/actividad_agenda.dart';
+import '../../clientes/presentation/cliente_detalle_screen.dart';
 import 'llamadas_providers.dart';
 import 'que_paso_screen.dart';
 import 'reagendar_sheet.dart';
@@ -54,9 +55,22 @@ class TarjetaActividad extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              a.cliente,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            // Tocar el nombre abre el detalle: qué se habló la última vez.
+            InkWell(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => ClienteDetalleScreen(clienteId: a.clienteId),
+                ),
+              ),
+              child: Text(
+                a.cliente,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: KusdyColors.primarioOscuro,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
             Text(
               [

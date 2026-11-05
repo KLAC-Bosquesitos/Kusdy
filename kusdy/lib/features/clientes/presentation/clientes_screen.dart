@@ -6,6 +6,8 @@ import '../../../core/utils/fechas.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
 import '../../../core/widgets/estado_vacio.dart';
+import '../../agenda/presentation/agenda_providers.dart';
+import '../../hoy/presentation/hoy_providers.dart';
 import '../domain/cliente.dart';
 import 'cliente_detalle_screen.dart';
 import 'cliente_form_screen.dart';
@@ -88,7 +90,11 @@ class ClientesScreen extends ConsumerWidget {
         builder: (_) => ClienteFormScreen(
           alGuardar: (datos) async {
             await ref.read(clientesRepositoryProvider).crearCliente(datos);
-            ref.invalidate(clientesProvider);
+            // La primera llamada debe verse ya en Hoy y Agenda.
+            ref
+              ..invalidate(clientesProvider)
+              ..invalidate(pendientesHoyProvider)
+              ..invalidate(agendaProvider);
           },
         ),
       ),

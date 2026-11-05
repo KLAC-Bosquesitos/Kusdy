@@ -70,3 +70,20 @@ Nunca se edita una migración existente: cada cambio es un archivo nuevo en `sup
 ## Flujo de trabajo
 
 Issue -> Rama -> Pull Request -> Revisión -> Merge. Nadie trabaja directamente sobre `main`.
+
+## Capturas
+
+Pantalla Hoy
+![alt text](image.png)
+
+Pantalla Clientes
+![alt text](image-1.png)
+
+Pantallas Detalles
+![alt text](image-2.png)
+
+Pantallas ¿Que paso?
+![alt text](image-3.png)
+
+Pantallas Agenda
+![alt text](image-4.png)

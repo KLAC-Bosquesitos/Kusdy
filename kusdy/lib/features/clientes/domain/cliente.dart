@@ -8,6 +8,7 @@ class Cliente {
     required this.telefono,
     required this.registradoEl,
     this.producto,
+    this.productoId,
     this.direccion,
     this.ciudad,
     this.notaFija,
@@ -22,6 +23,7 @@ class Cliente {
   final String telefono;
   final DateTime registradoEl;
   final String? producto;
+  final String? productoId;
   final String? direccion;
   final String? ciudad;
   final String? notaFija;
@@ -39,5 +41,6 @@ class Cliente {
     direccion: direccion,
     ciudad: ciudad,
     notaFija: notaFija,
+    productoInteresId: productoId,
   );
 }

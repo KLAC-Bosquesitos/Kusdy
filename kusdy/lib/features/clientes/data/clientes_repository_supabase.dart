@@ -190,6 +190,7 @@ Cliente clienteDesdeFila(
     notaFija: f['nota_fija'] as String?,
     registradoEl: fecha('creado_en')!,
     producto: productos[f['producto_interes_id']],
+    productoId: f['producto_interes_id'] as String?,
     ultimoContacto: fecha('ultimo_contacto'),
     proximaLlamada: fecha('proxima_llamada'),
     noContesto: f['no_contesto'] as bool? ?? false,
@@ -207,5 +208,6 @@ Map<String, dynamic> filaDesdeDatos(DatosCliente d) {
     'direccion': limpio(d.direccion),
     'ciudad': limpio(d.ciudad),
     'nota_fija': limpio(d.notaFija),
+    'producto_interes_id': d.productoInteresId,
   };
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kusdy/features/productos/data/productos_interes_repository_falso.dart';
+import 'package:kusdy/features/productos/presentation/productos_interes_providers.dart';
 import 'package:kusdy/core/utils/fechas.dart';
 import 'package:kusdy/features/agenda/data/actividades_repository_falso.dart';
 import 'package:kusdy/features/agenda/domain/actividad_agenda.dart';
@@ -23,7 +25,12 @@ class RepositorioEspia extends ActividadesRepositoryFalso {
 
 Widget hoyCon(ActividadesRepositoryFalso repositorio) {
   return ProviderScope(
-    overrides: [actividadesRepositoryProvider.overrideWithValue(repositorio)],
+    overrides: [
+      actividadesRepositoryProvider.overrideWithValue(repositorio),
+      productosInteresRepositoryProvider.overrideWithValue(
+        ProductosInteresRepositoryFalso(),
+      ),
+    ],
     child: const MaterialApp(home: HoyScreen()),
   );
 }
@@ -46,6 +53,15 @@ Future<void> tocar(WidgetTester tester, String texto) async {
   await tester.ensureVisible(find.text(texto));
   await tester.pumpAndSettle();
   await tester.tap(find.text(texto));
+  await tester.pumpAndSettle();
+}
+
+Future<void> elegirProducto(WidgetTester tester, String nombre) async {
+  await tester.ensureVisible(find.byKey(const Key('producto-interes')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(const Key('producto-interes')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(nombre).last);
   await tester.pumpAndSettle();
 }
 
@@ -90,6 +106,34 @@ void main() {
     // Volvió a Hoy, recargado: María ya no está pendiente hoy.
     expect(find.text('Listo: María López.'), findsOne);
     expect(find.text('María López'), findsNothing);
+  });
+
+  testWidgets('Le interesa -> elegir producto -> Guardar', (tester) async {
+    final repositorio = RepositorioEspia();
+    await tester.pumpWidget(hoyCon(repositorio));
+    await tester.pumpAndSettle();
+
+    await hecho(tester, 'María López');
+    await tocar(tester, 'Le interesa');
+    await elegirProducto(tester, 'Calentador solar 200 L');
+    await tocar(tester, 'Guardar');
+
+    final r = repositorio.registros.single;
+    expect(r.resultado, ResultadoLlamada.interesado);
+    expect(r.productoInteresId, 'p200');
+  });
+
+  testWidgets('No contestó no pregunta el producto', (tester) async {
+    final repositorio = RepositorioEspia();
+    await tester.pumpWidget(hoyCon(repositorio));
+    await tester.pumpAndSettle();
+
+    await hecho(tester, 'María López');
+    await tocar(tester, 'No contestó');
+
+    expect(find.byKey(const Key('producto-interes')), findsNothing);
+    await tocar(tester, 'Guardar');
+    expect(repositorio.registros.single.productoInteresId, isNull);
   });
 
   testWidgets('número equivocado no ofrece fecha', (tester) async {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kusdy/features/productos/data/productos_interes_repository_falso.dart';
+import 'package:kusdy/features/productos/presentation/productos_interes_providers.dart';
 import 'package:kusdy/features/clientes/data/clientes_repository_falso.dart';
 import 'package:kusdy/features/clientes/data/comentarios_repository_falso.dart';
 import 'package:kusdy/features/clientes/presentation/cliente_detalle_screen.dart';
@@ -16,6 +18,9 @@ Widget app(
     overrides: [
       clientesRepositoryProvider.overrideWithValue(
         clientes ?? ClientesRepositoryFalso(demora: Duration.zero),
+      ),
+      productosInteresRepositoryProvider.overrideWithValue(
+        ProductosInteresRepositoryFalso(),
       ),
       comentariosRepositoryProvider.overrideWithValue(
         comentarios ?? ComentariosRepositoryFalso(demora: Duration.zero),
@@ -98,6 +103,8 @@ void main() {
       find.widgetWithText(TextFormField, 'Teléfono *'),
       '44559012',
     );
+    await tester.ensureVisible(find.text('Guardar'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Guardar'));
     await tester.pumpAndSettle();
 
