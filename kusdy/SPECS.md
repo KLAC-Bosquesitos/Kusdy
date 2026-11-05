@@ -98,7 +98,7 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
-| 2026-11-05 | 1 / 3 | Cierre del Sprint 3: al cambiar de cuenta, Hoy, Agenda y Clientes cargan los datos de la nueva (antes quedaban los de la anterior hasta cerrar la app), con prueba de la app completa; estado y fases de este archivo al día; capturas al inicio del README. | @chrisram21 | #42 |
+| 2026-11-05 | 1 / 3 | Cierre del Sprint 3: al cambiar de cuenta, Hoy, Agenda y Clientes cargan los datos de la nueva (antes quedaban los de la anterior hasta cerrar la app), con prueba de la app completa; estado y fases de este archivo al día; capturas al inicio del README. | @chrisram21 | #43 |
 | 2026-11-04 | 2 / 3 | Arreglos tras las pruebas con usuarios: tocar el nombre en Hoy o Agenda abre el detalle del cliente; un cliente nuevo con llamada para hoy aparece enseguida en Hoy y Agenda; producto de interés al crear el cliente (opcional) y en "¿Qué pasó?" cuando le interesa (migración 6 con prueba en el CI); `docs/usuarios.md` y capturas del README. | @chrisram21 | #40 |
 | 2026-11-04 | 3 | Sprint 3 · PR 2.2: pantalla dinámica «¿Qué pasó?», reagendamiento con atajos, tarjeta compartida de actividades y sección «Se te pasaron» en Hoy. Pruebas de lógica y widgets aprobadas; validación con Supabase pendiente. | @Andrea2507 y @Kennethram15 | Issue #34 · PR #38 |
 | 2026-11-04 | 3 | Sprint 3 · PR 2.1: migración 5 para registrar resultados de llamadas, prueba SQL integrada al CI y repositorio de actividades conectado a Supabase para Hoy y Agenda. Migración aplicada en kusdy-dev el 2026-11-04. | @Kennethram15 y @Andrea2507 | Issue #33 · PR #39 |
