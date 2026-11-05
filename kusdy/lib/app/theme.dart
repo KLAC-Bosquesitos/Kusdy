@@ -42,12 +42,8 @@ final kusdyTheme = ThemeData(
   inputDecorationTheme: _camposDeFormulario,
 );
 
-// Estilo común de todos los campos de formulario (TextField, TextFormField,
-// DropdownButtonFormField). Pensado para leerse sin esfuerzo: etiquetas
-// grandes y oscuras, borde visible y fondo blanco.
-//
-// Ojo: Flutter dibuja la etiqueta flotante (la que sube al borde) al 75 % de
-// su tamaño, por eso floatingLabelStyle es más grande que labelStyle.
+// Campos de formulario más legibles (pedido de Freddy y Amilcar).
+// La etiqueta flotante se dibuja al 75 %, por eso va en 22.
 Color _colorEtiqueta(Set<WidgetState> estados) {
   if (estados.contains(WidgetState.error)) return KusdyColors.vencido;
   if (estados.contains(WidgetState.focused)) return KusdyColors.primario;
@@ -74,15 +70,12 @@ final _camposDeFormulario = InputDecorationTheme(
   ),
   floatingLabelStyle: WidgetStateTextStyle.resolveWith(
     (estados) => TextStyle(
-      fontSize: 22, // se ve como ~16.5
+      fontSize: 22,
       fontWeight: FontWeight.w700,
       color: _colorEtiqueta(estados),
     ),
   ),
-  hintStyle: const TextStyle(
-    fontSize: 17,
-    color: KusdyColors.textoSecundario,
-  ),
+  hintStyle: const TextStyle(fontSize: 17, color: KusdyColors.textoSecundario),
   helperStyle: const TextStyle(
     fontSize: 15,
     color: KusdyColors.textoSecundario,

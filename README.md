@@ -73,17 +73,12 @@ Issue -> Rama -> Pull Request -> Revisión -> Merge. Nadie trabaja directamente 
 
 ## Capturas
 
-Pantalla Hoy
-![alt text](image.png)
+Con la cuenta de demo, en un teléfono Android con el APK de `main`.
 
-Pantalla Clientes
-![alt text](image-1.png)
+| Hoy | Clientes | Detalle del cliente |
+|:---:|:---:|:---:|
+| <img src="docs/capturas/hoy.png" width="230" alt="Hoy: llamadas que se pasaron y las de hoy"> | <img src="docs/capturas/clientes.png" width="230" alt="Lista de clientes con búsqueda y filtros"> | <img src="docs/capturas/detalle.png" width="230" alt="Detalle del cliente con Llamar, WhatsApp y comentarios"> |
+| **¿Qué pasó?** | **Agenda** | |
+| <img src="docs/capturas/que-paso.png" width="230" alt="Pantalla ¿Qué pasó? después de Hecho, con el producto de interés"> | <img src="docs/capturas/agenda.png" width="230" alt="Agenda por día con filtro por tipo"> | |
 
-Pantallas Detalles
-![alt text](image-2.png)
 
-Pantallas ¿Que paso?
-![alt text](image-3.png)
-
-Pantallas Agenda
-![alt text](image-4.png)

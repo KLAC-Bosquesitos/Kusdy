@@ -14,9 +14,9 @@ Cada persona probó el APK de `main` en un teléfono, sin ayuda, con las tareas 
 
 | # | Quién (rol) | Fecha | Qué intentó | Qué falló o le costó | Qué dijo | PR que lo arregló |
 |---|---|---|---|---|---|---|
-| 1 | Freddy (jefe de sucursal) | 3/11/2026|Las 5 tareas de arriba | Le costó leer algunas enunciados |Dijo que estaba bonito pero que le gsutaria que los titulos fueran mas grandes |#40 |
+| 1 | Freddy (jefe de sucursal) | 3/11/2026|Las 5 tareas de arriba | Le costó leer algunas enunciados |Dijo que estaba bonito pero que le gustaria que los titulos fueran mas grandes |#40 |
 | 2 |Amilcar Alonzo (vendedor) |1/11/2026|Las 5 tareas de arriba |Lo mismo que a Freddy, la lectura de ciertos titulos |Dijo que le gusta la interfaz y que le gustaria comenzar a usarlo |#40 |
-| 3 |Mirna Ardiano (vendedor)|23/10/2026 |Las 5 tareas de arriba |Las 5 tareas de arriba |Lo mismo que a Freddy, la lectura de ciertos titulos |Le gusta la interfaz pero le gustaria una opcion de un calendario |#23 |
+| 3 | Mirna Ardiano (vendedor) | 23/10/2026 | Las 5 tareas de arriba | Le costó leer ciertos títulos | Le gusta la interfaz, pero le gustaría un calendario | #23 |
 
 ## Cambios pedidos antes de esta prueba
 
