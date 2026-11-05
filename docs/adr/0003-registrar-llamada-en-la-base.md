@@ -9,7 +9,7 @@ Al tocar **Hecho**, la app guarda varias cosas: cierra la llamada con su resulta
 
 ## Decisión
 
-<!-- Pareja 2 (PR 2.1): completar con sus palabras. -->
+Decidimos utilizar una función en PostgreSQL porque registrar el resultado de una llamada implica varias operaciones relacionadas: completar la actividad, guardar el comentario, crear el siguiente seguimiento cuando corresponda y actualizar la etapa del cliente. Estas operaciones deben realizarse juntas para evitar inconsistencias. Si alguna falla, la transacción revierte los cambios y evita que una llamada quede completada sin registrar el seguimiento correspondiente. Además, concentrar esta lógica en la base de datos facilita su verificación y permite respetar los permisos establecidos mediante las políticas RLS.
 
 Una función de Postgres, `registrar_resultado_llamada(...)` (migración 5), hace todo **en una sola transacción**. La app la llama con `.rpc()`. La función usa `security invoker`, así que respeta los mismos permisos (RLS) que una consulta normal.
 

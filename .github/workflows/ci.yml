@@ -84,6 +84,12 @@ jobs:
       - name: Prueba de la migración de categorías
         run: psql -v ON_ERROR_STOP=1 -d kusdy_migracion -f supabase/pruebas/20_migracion_categorias.sql
 
+      # Cada prueba arma su base desde cero: una base vacía por prueba.
+      - name: Prueba de registrar_resultado_llamada (migración 5)
+        run: |
+          createdb kusdy_llamadas
+          psql -v ON_ERROR_STOP=1 -d kusdy_llamadas -f supabase/pruebas/30_registrar_llamada.sql
+
   apk:
     name: APK de prueba
     needs: calidad # solo si la calidad pasó
