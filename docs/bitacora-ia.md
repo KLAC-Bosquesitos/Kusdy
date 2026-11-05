@@ -186,3 +186,14 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** Hubieron correcciones al momento de realizar la documentacion faltante
 - **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
 - **Commit / PR:** #40
+
+
+## 2026-11-05 · @chrisram21 — Datos de la cuenta anterior al cambiar de usuario y cierre de documentación
+
+- **Herramienta:** Claude.
+- **Especificación:** Al probar el APK, después de cerrar sesión y entrar con la cuenta demo, Hoy y Agenda seguían vacías (mostraban lo de la cuenta anterior) hasta cerrar la app. Pedí arreglarlo y dejar el README y SPECS al día.
+- **Resultado:** Al entrar con una cuenta, `PuertaSesion` invalida los providers de Hoy, Agenda, Clientes, detalle, comentarios y categorías; se vuelven a pedir a Supabase con la cuenta nueva.
+- **Aceptado:** Hacerlo en un solo lugar (la puerta de la sesión) y solo al entrar, no al salir, para no pedir datos sin sesión.
+- **Rechazado / corregido:** La primera versión también limpiaba al salir y dejaba consultas pendientes en las pruebas; se dejó solo al entrar.
+- **Verificación:** prueba nueva `cambio_de_cuenta_test.dart` (falla sin el arreglo); `flutter analyze` sin observaciones; 87 pruebas en verde. Probado en el teléfono: cerrar sesión, entrar con la demo y Hoy carga sin cerrar la app.
+- **Commit / PR:** #42
