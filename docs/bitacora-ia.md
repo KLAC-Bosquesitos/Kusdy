@@ -125,3 +125,14 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** No hubo tantas correcciones ya que solo se trata de dejar de usar los repositorios falsos y usar los verdaderos ademas de plantar las bases.
 - **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
 - **Commit / PR:** #29
+
+## 2026-11-3 · @chrisram21 Co-authored-by: WishoSz — Formulario y detalle del cliente
+
+- **Herramienta:** Claude.
+- **Especificación:** El apartado del  CRUD para los clientes que vengan desde supabase, vamos a hacer un formulario unico para crear y editar clietnes.
+- **Resultado:** Varias pantllas nuevas para mostrar los datos de los clientes y poder manejarlos
+- **Aceptado:** La parte del codigo que muestra los clientes como widgets.
+- **Rechazado / corregido:** Hubiera correcciones en la parte del layout y de la paleta de colores.
+- **Verificación:** `flutter analyze` sin observaciones; `flutter test` en verde.
+- **Commit / PR:** #36
+
