@@ -28,9 +28,9 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 - **Rechazado / corregido:** Se evitó incluir el archivo ZIP original en el repositorio y modificar archivos ajenos a la tarea. No se instaló PostgreSQL únicamente para ejecutar la prueba SQL local, ya que el proyecto dispone de una comprobación automatizada mediante GitHub Actions. Se mantuvo pendiente la aplicación de la migración en `kusdy-dev` hasta su integración y autorización correspondiente.
 
-- **Verificación:** Se ejecutó `dart format --output=none --set-exit-if-changed lib test`, con 0 archivos modificados. `flutter analyze` terminó sin observaciones y `flutter test` finalizó con 67 pruebas aprobadas. Se comprobó que `pubspec.lock` no presentó modificaciones. La prueba SQL en PostgreSQL y la verificación de persistencia en Supabase permanecen pendientes.
+- **Verificación:** Se ejecutó `dart format --output=none --set-exit-if-changed lib test`, con 0 archivos modificados. `flutter analyze` terminó sin observaciones y `flutter test` finalizó con 67 pruebas aprobadas. Se comprobó que `pubspec.lock` no presentó modificaciones. .La prueba SQL de la migración 5 se ejecutó correctamente en GitHub Actions utilizando PostgreSQL 17.
 
-- **Commit / PR:** Issue #33. PR pendiente de creación.
+- **Commit / PR:** Issue #33. PR #39.
 
 ## 2026-11-01 · @Kennethram15 / @Andrea2507 — Lab S16, Parte B (CRUD de categorías)
 
