@@ -70,3 +70,15 @@ Nunca se edita una migración existente: cada cambio es un archivo nuevo en `sup
 ## Flujo de trabajo
 
 Issue -> Rama -> Pull Request -> Revisión -> Merge. Nadie trabaja directamente sobre `main`.
+
+## Capturas
+
+Con la cuenta de demo, en un teléfono Android con el APK de `main`.
+
+| Hoy | Clientes | Detalle del cliente |
+|:---:|:---:|:---:|
+| <img src="docs/capturas/hoy.png" width="230" alt="Hoy: llamadas que se pasaron y las de hoy"> | <img src="docs/capturas/clientes.png" width="230" alt="Lista de clientes con búsqueda y filtros"> | <img src="docs/capturas/detalle.png" width="230" alt="Detalle del cliente con Llamar, WhatsApp y comentarios"> |
+| **¿Qué pasó?** | **Agenda** | |
+| <img src="docs/capturas/que-paso.png" width="230" alt="Pantalla ¿Qué pasó? después de Hecho, con el producto de interés"> | <img src="docs/capturas/agenda.png" width="230" alt="Agenda por día con filtro por tipo"> | |
+
+

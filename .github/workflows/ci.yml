@@ -90,6 +90,11 @@ jobs:
           createdb kusdy_llamadas
           psql -v ON_ERROR_STOP=1 -d kusdy_llamadas -f supabase/pruebas/30_registrar_llamada.sql
 
+      - name: Prueba del producto de interés (migración 6)
+        run: |
+          createdb kusdy_producto
+          psql -v ON_ERROR_STOP=1 -d kusdy_producto -f supabase/pruebas/40_producto_interes.sql
+
   apk:
     name: APK de prueba
     needs: calidad # solo si la calidad pasó

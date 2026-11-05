@@ -151,6 +151,8 @@ Map<String, dynamic> parametrosDeRegistro(RegistroLlamada r) {
         : comentario,
     'p_siguiente_tipo': r.siguienteTipo?.name,
     'p_siguiente_fecha': r.siguienteFecha?.toUtc().toIso8601String(),
+    // Solo si se eligió: así no cambia el producto que ya tenía.
+    if (r.productoInteresId != null) 'p_producto': r.productoInteresId,
   };
 }
 

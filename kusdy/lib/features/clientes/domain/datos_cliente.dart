@@ -6,6 +6,7 @@ class DatosCliente {
     this.direccion,
     this.ciudad,
     this.notaFija,
+    this.productoInteresId,
     this.primeraLlamada,
   });
 
@@ -14,6 +15,7 @@ class DatosCliente {
   final String? direccion;
   final String? ciudad;
   final String? notaFija;
+  final String? productoInteresId;
 
   // Solo al crear: si viene, se agenda la primera llamada.
   final DateTime? primeraLlamada;

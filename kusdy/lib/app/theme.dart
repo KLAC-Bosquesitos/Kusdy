@@ -39,4 +39,56 @@ final kusdyTheme = ThemeData(
     surface: KusdyColors.superficie,
     onSurface: KusdyColors.texto,
   ),
+  inputDecorationTheme: _camposDeFormulario,
+);
+
+// Campos de formulario más legibles (pedido de Freddy y Amilcar).
+// La etiqueta flotante se dibuja al 75 %, por eso va en 22.
+Color _colorEtiqueta(Set<WidgetState> estados) {
+  if (estados.contains(WidgetState.error)) return KusdyColors.vencido;
+  if (estados.contains(WidgetState.focused)) return KusdyColors.primario;
+  return KusdyColors.primarioOscuro;
+}
+
+OutlineInputBorder _borde(Color color, double grosor) => OutlineInputBorder(
+  borderRadius: BorderRadius.circular(8),
+  borderSide: BorderSide(color: color, width: grosor),
+);
+
+final _camposDeFormulario = InputDecorationTheme(
+  filled: true,
+  fillColor: KusdyColors.superficie,
+  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+  labelStyle: WidgetStateTextStyle.resolveWith(
+    (estados) => TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: estados.contains(WidgetState.error)
+          ? KusdyColors.vencido
+          : KusdyColors.textoSecundario,
+    ),
+  ),
+  floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+    (estados) => TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w700,
+      color: _colorEtiqueta(estados),
+    ),
+  ),
+  hintStyle: const TextStyle(fontSize: 17, color: KusdyColors.textoSecundario),
+  helperStyle: const TextStyle(
+    fontSize: 15,
+    color: KusdyColors.textoSecundario,
+  ),
+  errorStyle: const TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: KusdyColors.vencido,
+  ),
+  border: _borde(KusdyColors.bordeFuerte, 1.5),
+  enabledBorder: _borde(KusdyColors.bordeFuerte, 1.5),
+  focusedBorder: _borde(KusdyColors.primario, 2.5),
+  errorBorder: _borde(KusdyColors.vencido, 1.5),
+  focusedErrorBorder: _borde(KusdyColors.vencido, 2.5),
+  disabledBorder: _borde(KusdyColors.borde, 1),
 );

@@ -69,6 +69,19 @@ void main() {
     expect(f['nota_fija'], 'Llamar tarde');
   });
 
+  test('filaDesdeDatos guarda el producto de interés', () {
+    const datos = DatosCliente(nombre: 'Ana', telefono: '3390 1122');
+    expect(filaDesdeDatos(datos)['producto_interes_id'], isNull);
+    final conProducto = filaDesdeDatos(
+      const DatosCliente(
+        nombre: 'Ana',
+        telefono: '3390 1122',
+        productoInteresId: 'p200',
+      ),
+    );
+    expect(conProducto['producto_interes_id'], 'p200');
+  });
+
   test('textoParaBuscar quita lo que rompe el filtro .or()', () {
     expect(textoParaBuscar(' López, María (hija) '), 'López  María  hija');
     expect(textoParaBuscar('   '), '');

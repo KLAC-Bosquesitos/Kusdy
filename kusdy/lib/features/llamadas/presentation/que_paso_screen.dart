@@ -6,6 +6,7 @@ import '../../../core/utils/fechas.dart';
 import '../../agenda/domain/actividad_agenda.dart';
 import '../../agenda/domain/actividades_repository.dart';
 import '../../agenda/domain/resultado_llamada.dart';
+import '../../productos/presentation/selector_producto.dart';
 import '../domain/opciones_resultado.dart';
 import 'llamadas_providers.dart';
 import 'reagendar_sheet.dart';
@@ -26,6 +27,7 @@ class _QuePasoScreenState extends ConsumerState<QuePasoScreen> {
   ResultadoLlamada? _resultado;
   TipoActividad? _tipo;
   DateTime? _fecha;
+  String? _productoId;
   var _guardando = false;
   String? _error;
 
@@ -40,6 +42,7 @@ class _QuePasoScreenState extends ConsumerState<QuePasoScreen> {
     final dias = o.dias;
     setState(() {
       _resultado = r;
+      _productoId = null;
       _tipo = o.tipo;
       _fecha = (o.pideFecha && dias != null)
           ? fechaConAtajo(dias, DateTime.now())
@@ -65,6 +68,9 @@ class _QuePasoScreenState extends ConsumerState<QuePasoScreen> {
               comentario: _comentario.text,
               siguienteTipo: fecha == null ? null : _tipo,
               siguienteFecha: fecha,
+              productoInteresId: opcionesPara(resultado).pideProducto
+                  ? _productoId
+                  : null,
             ),
           );
       if (mounted) Navigator.of(context).pop(true);
@@ -217,6 +223,14 @@ class _QuePasoScreenState extends ConsumerState<QuePasoScreen> {
             ),
           ),
         ],
+      ],
+      if (o.pideProducto) ...[
+        const SizedBox(height: 16),
+        SelectorProducto(
+          valor: _productoId,
+          textoNinguno: 'Sin cambiar',
+          alCambiar: (id) => setState(() => _productoId = id),
+        ),
       ],
       const SizedBox(height: 16),
       TextField(

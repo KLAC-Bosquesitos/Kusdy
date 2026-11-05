@@ -33,6 +33,16 @@ void main() {
     expect(opcionesPara(ResultadoLlamada.noVolverALlamar).pideFecha, isFalse);
   });
 
+  test('solo se pregunta el producto si mostró interés', () {
+    expect(opcionesPara(ResultadoLlamada.interesado).pideProducto, isTrue);
+    expect(opcionesPara(ResultadoLlamada.compro).pideProducto, isTrue);
+    expect(opcionesPara(ResultadoLlamada.noContesto).pideProducto, isFalse);
+    expect(
+      opcionesPara(ResultadoLlamada.numeroEquivocado).pideProducto,
+      isFalse,
+    );
+  });
+
   test('fechaConAtajo: cruza de mes y conserva la hora', () {
     final ahora = DateTime(2026, 11, 29, 18, 45);
     expect(fechaConAtajo(3, ahora), DateTime(2026, 12, 2, 9));
