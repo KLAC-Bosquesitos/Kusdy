@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/utils/fechas.dart';
-import '../data/actividades_repository_falso.dart';
+import '../data/actividades_repository_supabase.dart';
 import '../domain/actividad_agenda.dart';
 import '../domain/actividades_repository.dart';
 import '../domain/filtro_agenda.dart';
@@ -9,7 +10,7 @@ import '../domain/filtro_agenda.dart';
 // Único punto donde se elige el repositorio de actividades (Hoy y Agenda).
 // Las pruebas lo reemplazan con overrideWithValue.
 final actividadesRepositoryProvider = Provider<ActividadesRepository>((ref) {
-  return ActividadesRepositoryFalso(modo: ModoAgenda.desdeEntorno());
+  return ActividadesRepositorySupabase(Supabase.instance.client);
 });
 
 // El filtro activo. Empieza en hoy, con todos los tipos. Cada método
