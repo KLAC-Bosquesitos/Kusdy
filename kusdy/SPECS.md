@@ -10,10 +10,10 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 
 | | |
 |---|---|
-| **Fase actual** | 0. Preparación 🔄 (falta conectar la app a Supabase) |
-| **Fase siguiente** | 1. Login y perfiles; en paralelo se pueden construir pantallas de la fase 2 y 3 con repositorios falsos |
-| **Última actualización** | 2026-10-22 |
-| **Bloqueos** | Ninguno para programar. La tabla `productos` es provisional hasta tener los datos reales (afecta a la fase 5). |
+| **Fase actual** | Sprint 3 cerrado: seguimiento de clientes completo (fases 2 y 3) conectado a Supabase |
+| **Fase siguiente** | Hoja "Filtrar y ordenar", perfil y rol en la app (fase 1) y después productos y ventas (fase 5) |
+| **Última actualización** | 2026-11-05 |
+| **Bloqueos** | Ninguno. |
 
 ---
 
@@ -23,10 +23,10 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 
 | # | Fase | Estado | Historias de usuario |
 |---|---|---|---|
-| 0 | Preparación | 🔄 | — |
-| 1 | Login y perfiles | ⏳ | HU-01, HU-17 (solo rol y menús) |
-| 2 | Clientes | 🔄 (lista con datos falsos) | HU-02, HU-03, HU-04, HU-05, HU-13 |
-| 3 | Llamadas y agenda | ⏳ | HU-06, HU-07, HU-10, HU-14 |
+| 0 | Preparación | ✅ | — |
+| 1 | Login y perfiles | 🔄 (login y cerrar sesión con Supabase, #27) | HU-01, HU-17 (solo rol y menús) |
+| 2 | Clientes | 🔄 (Supabase, formulario y detalle con comentarios; falta "Filtrar y ordenar") | HU-02, HU-03, HU-04, HU-05, HU-13 |
+| 3 | Llamadas y agenda | ✅ (Hoy, "¿Qué pasó?", Mover y Agenda desde Supabase) | HU-06, HU-07, HU-10, HU-14 |
 | 4 | Recordatorios | ⏳ | HU-08 |
 | 5 | Productos y ventas | 🔄 (CRUD de categorías de producto; productos y ventas pendientes) | HU-15, HU-18 |
 | 6 | Cotizaciones | ⏳ | HU-09 |
@@ -34,7 +34,7 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 | 8 | Despliegue | ⏳ | HU-12 |
 | 9 | Mejoras (push, offline, onboarding, importar Excel, usuarios desde la app) | ⏳ | HU-17 |
 
-### Fase 0 · Preparación 🔄
+### Fase 0 · Preparación ✅
 
 **Objetivo:** dejar listo el repositorio, el proyecto Flutter, la base de datos y el entorno de desarrollo.
 
@@ -46,43 +46,44 @@ Leyenda de estado: ✅ terminado · 🔄 en curso · ⏳ pendiente · ⛔ bloque
 - [x] Proyecto de Supabase de desarrollo (`kusdy-dev`).
 - [x] Base de datos v2: 17 tablas, 2 vistas, RLS por rol y sucursal, migraciones aplicadas y copiadas a `supabase/migrations/`, pruebas en `supabase/pruebas/`.
 - [ ] `supabase init` y `supabase link` en cada máquina (ver `README.md`).
-- [ ] Crear en el panel el usuario de Freddy, la sucursal `S01` y su perfil `jefe_sucursal`, y ponerlo como `jefe_id` de la sucursal.
-- [ ] Agregar los paquetes base a `pubspec.yaml`: `supabase_flutter`, `go_router`, `intl` (y `freezed`/`json_serializable` si el equipo lo confirma).
-- [ ] Inicializar Supabase en `lib/core/supabase/` con URL y llave publishable (propuesta: `--dart-define`).
+- [x] Crear en el panel el usuario de Freddy, la sucursal `S01` y su perfil `jefe_sucursal`, y ponerlo como `jefe_id` de la sucursal.
+- [x] Agregar los paquetes base a `pubspec.yaml`: `supabase_flutter` y `url_launcher` (`go_router` queda para después).
+- [x] Inicializar Supabase en `lib/core/supabase/` con URL y llave publishable.
 - [ ] Preparar el entorno de desarrollo de cada integrante.
 
 **Criterio de terminado:** cualquier integrante puede clonar el repo, correr `flutter run` y ver la app conectada al Supabase de desarrollo.
 
-### Fase 1 · Login y perfiles ⏳
+### Fase 1 · Login y perfiles 🔄
 
 **Objetivo:** el usuario inicia y cierra sesión con correo y contraseña, la sesión persiste, y la app conoce su rol y sucursal para mostrar solo lo que le corresponde.
 
-- [ ] Pantalla de login.
-- [ ] Inicio y cierre de sesión con Supabase Auth.
-- [ ] Sesión persistente.
+- [x] Pantalla de login. #27
+- [x] Inicio y cierre de sesión con Supabase Auth. #27
+- [x] Sesión persistente.
 - [ ] Redirección automática con `go_router` (sin sesión → login).
 - [ ] Leer el perfil (`perfiles`: nombre, rol, sucursal) y exponerlo con un provider.
-- [ ] Navegación inferior Hoy · Clientes · Agenda · Más; menú "Más" según el rol.
+- [x] Navegación inferior Hoy · Clientes · Agenda · Más (#19); menú "Más" según el rol.
 
 **Criterio de terminado:** Freddy entra con su cuenta, ve su nombre y rol, y al cerrar y abrir la app sigue con sesión.
 
 ### Fase 2 · Clientes 🔄
 
-- [x] Lista de clientes con estados cargando, error, vacío y datos (repositorio falso). #13
-- [ ] Repositorio real sobre la vista `clientes_resumen`.
-- [ ] Búsqueda por nombre o teléfono.
+- [x] Lista de clientes con estados cargando, error, vacío y datos. #13
+- [x] Repositorio real sobre la vista `clientes_resumen`, con borrar y Deshacer. #37
+- [x] Búsqueda por nombre o teléfono y filtro por mes. #22, #37
 - [ ] Hoja "Filtrar y ordenar" (no contestaron, mes de registro, producto, ciudad; orden por próxima llamada, último contacto o fecha de registro).
-- [ ] Formulario único de crear/editar cliente (solo nombre y teléfono obligatorios).
-- [ ] Detalle del cliente: datos, Llamar/WhatsApp/Mapa, nota fija, tarjeta de Comentarios (crear y editar los propios, "(editado)") e historial de eventos.
+- [x] Formulario único de crear/editar cliente (solo nombre y teléfono obligatorios; producto de interés opcional). #36, #40
+- [x] Detalle del cliente: datos, Llamar/WhatsApp, nota fija y tarjeta de Comentarios. #36
+- [ ] En el detalle: Mapa, editar comentarios propios e historial de eventos.
 
-### Fase 3 · Llamadas y agenda ⏳
+### Fase 3 · Llamadas y agenda ✅
 
-- [ ] Migración aditiva con `registrar_resultado_llamada(...)` y `agenda(dia, vendedor)`.
-- [ ] Widget compartido `TarjetaActividad`.
-- [ ] Pantalla Hoy (se te pasaron, hoy, cuotas atrasadas).
-- [ ] Pantalla dinámica "¿Qué pasó?" después de Hecho, con aviso de llamadas sin respuesta.
-- [ ] Reagendar (Mover) con atajos de fecha.
-- [ ] Agenda por día con filtro por tipo y botón +.
+- [x] Migración 5 con `registrar_resultado_llamada(...)` y su prueba en el CI. #39 (la 6 agrega el producto, #40)
+- [x] Widget compartido `TarjetaActividad`. #38
+- [x] Pantalla Hoy con "Se te pasaron" y las de hoy (cuotas atrasadas: fase 5). #38
+- [x] Pantalla dinámica "¿Qué pasó?" después de Hecho, con aviso de llamadas sin respuesta. #38
+- [x] Reagendar (Mover) con atajos de fecha. #38
+- [x] Agenda por día con filtro por tipo. #23, #39
 
 ### Fases 4 a 9 ⏳
 
@@ -97,13 +98,14 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
+| 2026-11-05 | 1 / 3 | Cierre del Sprint 3: al cambiar de cuenta, Hoy, Agenda y Clientes cargan los datos de la nueva (antes quedaban los de la anterior hasta cerrar la app), con prueba de la app completa; estado y fases de este archivo al día; capturas al inicio del README. | @chrisram21 | #42 |
 | 2026-11-04 | 2 / 3 | Arreglos tras las pruebas con usuarios: tocar el nombre en Hoy o Agenda abre el detalle del cliente; un cliente nuevo con llamada para hoy aparece enseguida en Hoy y Agenda; producto de interés al crear el cliente (opcional) y en "¿Qué pasó?" cuando le interesa (migración 6 con prueba en el CI); `docs/usuarios.md` y capturas del README. | @chrisram21 | #40 |
 | 2026-11-04 | 3 | Sprint 3 · PR 2.2: pantalla dinámica «¿Qué pasó?», reagendamiento con atajos, tarjeta compartida de actividades y sección «Se te pasaron» en Hoy. Pruebas de lógica y widgets aprobadas; validación con Supabase pendiente. | @Andrea2507 y @Kennethram15 | Issue #34 · PR #38 |
 | 2026-11-04 | 3 | Sprint 3 · PR 2.1: migración 5 para registrar resultados de llamadas, prueba SQL integrada al CI y repositorio de actividades conectado a Supabase para Hoy y Agenda. Migración aplicada en kusdy-dev el 2026-11-04. | @Kennethram15 y @Andrea2507 | Issue #33 · PR #39 |
 | 2026-11-03 | 2 | Clientes desde Supabase: lista con filtro en el servidor, crear, editar, borrar con Deshacer y comentarios; pruebas de datos. | @WishoSz y @chrisram21 | #37 |
 | 2026-11-03 | 2 | Formulario único para crear y editar clientes, detalle con Llamar/WhatsApp y tarjeta de Comentarios; pruebas de lógica y de pantalla. | @chrisram21 y @WishoSz | #36 |
 | 2026-11-03 | 2 / 3 | Sprint 3 · base común: contratos de clientes, comentarios y actividades; ADR; README con el problema; plantilla de pruebas con usuarios. | @chrisram21 | #35 |
-| 2026-11-01 | 5 | Lab S16 · Pareja 2: CRUD de categorías de productos con lista, formulario para crear y editar, archivado, eliminación controlada, integración desde Más, estados de consulta y ocho pruebas de widget. | @Kennethram15 y @Andrea2507 | #26 · PR #N |
+| 2026-11-01 | 5 | Lab S16 · Pareja 2: CRUD de categorías de productos con lista, formulario para crear y editar, archivado, eliminación controlada, integración desde Más, estados de consulta y ocho pruebas de widget. | @Kennethram15 y @Andrea2507 | #26 · PR #29 |
 | 2026-10-22 | 0 | Contexto actualizado tras la retroalimentación de Freddy: `CLAUDE.md`, `AGENTES.md`, `README.md` y este archivo; migraciones de la BD v2 en `supabase/migrations/`, pruebas SQL, diseño de BD en `docs/bd/` y documentos de referencia en `docs/contexto/`. | Chris (con Claude) | — |
 | 2026-10-22 | 0 | Base de datos v2 diseñada, probada y aplicada en `kusdy-dev` (migraciones `esquema_inicial` y `ajustes_advisors`). | Chris (con Claude) | — |
 | 2026-10-17 | 4 | Lab S14 · Parte B: Inicio "Clientes para hoy" (HU-10) con estados cargando, error con Reintentar, vacío y datos; repositorio falso; navegación a Clientes y pruebas de widget. | @kennethram15 y @andrea2507 | #15 |
