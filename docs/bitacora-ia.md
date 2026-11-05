@@ -30,7 +30,7 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 - **Verificación:** Se ejecutó `dart format --output=none --set-exit-if-changed lib test`, sin modificaciones. `flutter analyze` terminó sin observaciones y `flutter test` finalizó con 73 pruebas aprobadas. Se confirmó que `pubspec.lock` no presentó modificaciones. La comprobación del flujo completo con Supabase y las pruebas manuales en un dispositivo permanecen pendientes.
 
-- **Commit / PR:** Issue #34. PR pendiente de creación.
+- **Commit / PR:** Issue #34. PR #38.
 
 
 ## 2026-11-01 · @Kennethram15 / @Andrea2507 — Lab S16, Parte B (CRUD de categorías)
