@@ -5,9 +5,9 @@ import '../../../app/pestana.dart';
 import '../../../app/theme.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
-import '../../../core/utils/fechas.dart';
 import '../../../core/widgets/estado_vacio.dart';
 import '../../agenda/domain/actividad_agenda.dart';
+import '../../llamadas/presentation/tarjeta_actividad.dart';
 import 'hoy_providers.dart';
 
 // HU-10 · Inicio "Clientes para hoy" (boceto 1). Los 4 estados de una lectura:
@@ -60,6 +60,8 @@ class HoyScreen extends ConsumerWidget {
   }
 }
 
+// Arriba "Se te pasaron" (lo vencido, en rojo): es lo que más le preocupa
+// a Fredy. Después, lo de hoy.
 class _ListaPendientes extends StatelessWidget {
   const _ListaPendientes({required this.pendientes});
 
@@ -67,52 +69,60 @@ class _ListaPendientes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    final ahora = DateTime.now();
+    final vencidas = pendientes.where((a) => a.vencida(ahora)).toList();
+    final deHoy = pendientes.where((a) => !a.vencida(ahora)).toList();
+
+    return ListView(
       padding: const EdgeInsets.all(16),
-      itemCount: pendientes.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 12),
-      itemBuilder: (_, i) => _TarjetaPendiente(pendiente: pendientes[i]),
+      children: [
+        if (vencidas.isNotEmpty) ...[
+          _Titulo(
+            'Se te pasaron (${vencidas.length})',
+            color: KusdyColors.vencido,
+          ),
+          for (final a in vencidas)
+            _conEspacio(TarjetaActividad(actividad: a, conFecha: true)),
+          const SizedBox(height: 8),
+        ],
+        _Titulo('Hoy (${deHoy.length})', color: KusdyColors.primarioOscuro),
+        if (deHoy.isEmpty)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              'Nada más para hoy.',
+              style: TextStyle(
+                fontSize: 16,
+                color: KusdyColors.textoSecundario,
+              ),
+            ),
+          ),
+        for (final a in deHoy) _conEspacio(TarjetaActividad(actividad: a)),
+      ],
     );
   }
+
+  Widget _conEspacio(Widget hijo) =>
+      Padding(padding: const EdgeInsets.only(bottom: 12), child: hijo);
 }
 
-class _TarjetaPendiente extends StatelessWidget {
-  const _TarjetaPendiente({required this.pendiente});
+class _Titulo extends StatelessWidget {
+  const _Titulo(this.texto, {required this.color});
 
-  final ActividadAgenda pendiente;
+  final String texto;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: KusdyColors.superficie,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: KusdyColors.borde),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Text(
-          hora(pendiente.programadaPara),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: KusdyColors.primario,
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        texto,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: color,
         ),
-        title: Text(
-          pendiente.cliente,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          '${pendiente.tipo.texto} · ${pendiente.descripcion}\n'
-          '${pendiente.telefono}',
-          style: const TextStyle(
-            fontSize: 15,
-            color: KusdyColors.textoSecundario,
-          ),
-        ),
-        isThreeLine: true,
       ),
     );
   }

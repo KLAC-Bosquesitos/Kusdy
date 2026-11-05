@@ -6,6 +6,7 @@ import '../../../core/utils/fechas.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
 import '../../../core/widgets/estado_vacio.dart';
+import '../../llamadas/presentation/tarjeta_actividad.dart';
 import '../domain/actividad_agenda.dart';
 import '../domain/filtro_agenda.dart';
 import 'agenda_providers.dart';
@@ -206,7 +207,7 @@ class _ListaActividades extends ConsumerWidget {
           background: const _FondoCancelar(),
           confirmDismiss: (_) => _cancelarEnBase(context, ref, actividad),
           onDismissed: (_) => _avisarCancelada(context, ref, actividad),
-          child: _TarjetaActividad(actividad: actividad),
+          child: TarjetaActividad(actividad: actividad),
         );
       },
     );
@@ -307,49 +308,6 @@ class _FondoCancelar extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TarjetaActividad extends StatelessWidget {
-  const _TarjetaActividad({required this.actividad});
-
-  final ActividadAgenda actividad;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      color: KusdyColors.superficie,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: KusdyColors.borde),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Text(
-          hora(actividad.programadaPara),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: KusdyColors.primario,
-          ),
-        ),
-        title: Text(
-          actividad.cliente,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          '${actividad.tipo.texto} · ${actividad.descripcion}\n'
-          '${actividad.telefono}',
-          style: const TextStyle(
-            fontSize: 15,
-            color: KusdyColors.textoSecundario,
-          ),
-        ),
-        isThreeLine: true,
       ),
     );
   }
