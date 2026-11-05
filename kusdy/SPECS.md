@@ -98,6 +98,7 @@ Una entrada por cada cambio que se integra a `main`. La más reciente va arriba.
 | Fecha | Fase | Qué se hizo | Quién | PR / Issue |
 |---|---|---|---|---|
 | 2026-11-04 | 3 | Sprint 3 · PR 2.2: pantalla dinámica «¿Qué pasó?», reagendamiento con atajos, tarjeta compartida de actividades y sección «Se te pasaron» en Hoy. Pruebas de lógica y widgets aprobadas; validación con Supabase pendiente. | @Andrea2507 y @Kennethram15 | Issue #34 · PR #38 |
+| 2026-11-04 | 3 | Sprint 3 · PR 2.1: migración 5 para registrar resultados de llamadas, prueba SQL integrada al CI y repositorio de actividades conectado a Supabase para Hoy y Agenda. Despliegue en kusdy-dev pendiente. | @Kennethram15 y @Andrea2507 | Issue #33 · PR #39 |
 | 2026-11-03 | 2 | Clientes desde Supabase: lista con filtro en el servidor, crear, editar, borrar con Deshacer y comentarios; pruebas de datos. | @WishoSz y @chrisram21 | #37 |
 | 2026-11-03 | 2 | Formulario único para crear y editar clientes, detalle con Llamar/WhatsApp y tarjeta de Comentarios; pruebas de lógica y de pantalla. | @chrisram21 y @WishoSz | #37 |
 | 2026-11-03 | 2 / 3 | Sprint 3 · base común: contratos de clientes, comentarios y actividades; ADR; README con el problema; plantilla de pruebas con usuarios. | @chrisram21 | #29 |

@@ -32,6 +32,21 @@ qué especificaste, qué revisaste y qué rechazaste.
 
 - **Commit / PR:** Issue #34. PR #38.
 
+## 2026-11-04 · @Kennethram15 / @Andrea2507 — Sprint 3, PR 2.1 (Llamadas y Supabase)
+
+- **Herramienta:** ChatGPT para analizar las instrucciones del Sprint 3, revisar la integración de archivos, orientar la ejecución de pruebas y apoyar la documentación técnica.
+
+- **Especificación:** Integrar los archivos proporcionados para el PR 2.1, relacionados con la migración 5 y el repositorio de actividades en Supabase. Respetar la arquitectura por features, los contratos existentes, Riverpod, las políticas RLS y las migraciones anteriores. Evitar modificaciones ajenas a la tarea y conservar los avances integrados por los demás integrantes.
+
+- **Resultado:** Se incorporaron en la rama `feat/registrar-llamada` los archivos de la migración `registrar_resultado_llamada`, su prueba SQL, el repositorio de actividades de Supabase, la actualización del provider, las pruebas de datos y los cambios del flujo de integración continua. También se completó el ADR 0003, que explica por qué se utiliza una función transaccional en PostgreSQL.
+
+- **Aceptado:** Se conservaron los contratos y la estructura existente del proyecto. Se mantuvo el uso de una función de PostgreSQL para registrar el resultado de las llamadas en una transacción, respetando los permisos establecidos mediante RLS. No se modificaron las migraciones anteriores ni se agregaron dependencias innecesarias.
+
+- **Rechazado / corregido:** Se evitó incluir el archivo ZIP original en el repositorio y modificar archivos ajenos a la tarea. No se instaló PostgreSQL únicamente para ejecutar la prueba SQL local, ya que el proyecto dispone de una comprobación automatizada mediante GitHub Actions. Se mantuvo pendiente la aplicación de la migración en `kusdy-dev` hasta su integración y autorización correspondiente.
+
+- **Verificación:** Se ejecutó `dart format --output=none --set-exit-if-changed lib test`, con 0 archivos modificados. `flutter analyze` terminó sin observaciones y `flutter test` finalizó con 67 pruebas aprobadas. Se comprobó que `pubspec.lock` no presentó modificaciones. .La prueba SQL de la migración 5 se ejecutó correctamente en GitHub Actions utilizando PostgreSQL 17.
+
+- **Commit / PR:** Issue #33. PR #39.
 
 ## 2026-11-01 · @Kennethram15 / @Andrea2507 — Lab S16, Parte B (CRUD de categorías)
 
