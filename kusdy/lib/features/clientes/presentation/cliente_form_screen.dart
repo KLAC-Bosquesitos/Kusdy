@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/theme.dart';
+import '../../../core/utils/fechas.dart';
+import '../../llamadas/presentation/reagendar_sheet.dart';
 import '../../productos/presentation/selector_producto.dart';
 import '../domain/cliente.dart';
 import '../domain/datos_cliente.dart';
@@ -28,7 +30,8 @@ class _ClienteFormScreenState extends State<ClienteFormScreen> {
   late final _ciudad = TextEditingController(text: widget.cliente?.ciudad);
   late final _nota = TextEditingController(text: widget.cliente?.notaFija);
   late String? _productoId = widget.cliente?.productoId;
-  int? _diasPrimeraLlamada = 1;
+  // null = "Sin agendar".
+  DateTime? _primeraLlamada = primeraLlamadaEn(1);
   var _guardando = false;
   String? _error;
 
@@ -48,7 +51,6 @@ class _ClienteFormScreenState extends State<ClienteFormScreen> {
       _guardando = true;
       _error = null;
     });
-    final dias = _diasPrimeraLlamada;
     try {
       await widget.alGuardar(
         DatosCliente(
@@ -58,9 +60,7 @@ class _ClienteFormScreenState extends State<ClienteFormScreen> {
           ciudad: _ciudad.text,
           notaFija: _nota.text,
           productoInteresId: _productoId,
-          primeraLlamada: _editando || dias == null
-              ? null
-              : primeraLlamadaEn(dias),
+          primeraLlamada: _editando ? null : _primeraLlamada,
         ),
       );
       if (mounted) Navigator.of(context).pop(true);
@@ -74,13 +74,22 @@ class _ClienteFormScreenState extends State<ClienteFormScreen> {
     }
   }
 
+  // Calendario y reloj, igual que al reagendar.
+  Future<void> _elegirOtraFecha() async {
+    final elegida = await elegirFechaYHora(
+      context,
+      _primeraLlamada ?? primeraLlamadaEn(1),
+    );
+    if (elegida != null) setState(() => _primeraLlamada = elegida);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final primera = _primeraLlamada;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_editando ? 'Editar cliente' : 'Nuevo cliente'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
       ),
       body: Form(
         key: _form,
@@ -121,30 +130,51 @@ class _ClienteFormScreenState extends State<ClienteFormScreen> {
                 etiqueta: 'Nota fija (opcional)',
                 lineas: 3,
               ),
-              if (!_editando)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: DropdownButtonFormField<int?>(
-                    key: const Key('primera-llamada'),
-                    initialValue: _diasPrimeraLlamada,
-                    decoration: const InputDecoration(
-                      labelText: 'Primera llamada',
-                      border: OutlineInputBorder(),
-                    ),
-                    style: const TextStyle(
-                      fontSize: 17,
-                      color: KusdyColors.texto,
-                    ),
-                    items: const [
-                      DropdownMenuItem(value: 0, child: Text('Hoy')),
-                      DropdownMenuItem(value: 1, child: Text('Mañana')),
-                      DropdownMenuItem(value: 3, child: Text('En 3 días')),
-                      DropdownMenuItem(value: 7, child: Text('En 1 semana')),
-                      DropdownMenuItem(value: null, child: Text('Sin agendar')),
-                    ],
-                    onChanged: (v) => setState(() => _diasPrimeraLlamada = v),
-                  ),
+              if (!_editando) ...[
+                const Text(
+                  'Primera llamada',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
                 ),
+                const SizedBox(height: 10),
+                Wrap(
+                  key: const Key('primera-llamada'),
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final (dias, texto) in _atajos)
+                      ChoiceChip(
+                        label: Text(texto),
+                        selected:
+                            primera != null &&
+                            mismoDia(primera, primeraLlamadaEn(dias)),
+                        onSelected: (_) => setState(
+                          () => _primeraLlamada = primeraLlamadaEn(dias),
+                        ),
+                      ),
+                    ActionChip(
+                      avatar: const Icon(Icons.calendar_month, size: 18),
+                      label: const Text('Otra fecha'),
+                      onPressed: _elegirOtraFecha,
+                    ),
+                    ChoiceChip(
+                      label: const Text('Sin agendar'),
+                      selected: primera == null,
+                      onSelected: (_) => setState(() => _primeraLlamada = null),
+                    ),
+                  ],
+                ),
+                if (primera != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    'Llamada el ${diaLargo(primera)}, ${hora(primera)}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: KusdyColors.textoSecundario,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
+              ],
               if (_error != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
@@ -156,22 +186,54 @@ class _ClienteFormScreenState extends State<ClienteFormScreen> {
                     ),
                   ),
                 ),
-              FilledButton(
-                onPressed: _guardando ? null : _guardar,
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(56),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-                child: _guardando
-                    ? const SizedBox.square(
-                        dimension: 24,
-                        child: CircularProgressIndicator(strokeWidth: 3),
-                      )
-                    : const Text('Guardar'),
-              ),
             ],
           ),
         ),
+      ),
+      // Guardar fijo abajo, como en el diseño.
+      bottomNavigationBar: _BarraGuardar(
+        guardando: _guardando,
+        onGuardar: _guardar,
+      ),
+    );
+  }
+}
+
+const _atajos = [
+  (0, 'Hoy'),
+  (1, 'Mañana'),
+  (3, 'En 3 días'),
+  (7, 'En 1 semana'),
+];
+
+class _BarraGuardar extends StatelessWidget {
+  const _BarraGuardar({required this.guardando, required this.onGuardar});
+
+  final bool guardando;
+  final VoidCallback onGuardar;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: KusdyColors.superficie,
+        border: Border(top: BorderSide(color: KusdyColors.borde)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        12,
+        16,
+        12 + MediaQuery.viewPaddingOf(context).bottom,
+      ),
+      child: FilledButton(
+        onPressed: guardando ? null : onGuardar,
+        style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
+        child: guardando
+            ? const SizedBox.square(
+                dimension: 24,
+                child: CircularProgressIndicator(strokeWidth: 3),
+              )
+            : const Text('Guardar'),
       ),
     );
   }
@@ -205,10 +267,7 @@ class _Campo extends StatelessWidget {
         textCapitalization: capitalizar,
         maxLines: lineas,
         style: const TextStyle(fontSize: 17),
-        decoration: InputDecoration(
-          labelText: etiqueta,
-          border: const OutlineInputBorder(),
-        ),
+        decoration: InputDecoration(labelText: etiqueta),
       ),
     );
   }

@@ -11,6 +11,7 @@ import '../../hoy/presentation/hoy_providers.dart';
 import '../domain/cliente.dart';
 import 'cliente_detalle_screen.dart';
 import 'cliente_form_screen.dart';
+import 'etiqueta_seguimiento.dart';
 import 'clientes_providers.dart';
 
 // HU-03 · Consultar clientes y HU-13 · Filtrar clientes (por ahora búsqueda y
@@ -27,13 +28,21 @@ class ClientesScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clientes'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _agregarCliente(context, ref),
-        icon: const Icon(Icons.person_add_alt_1),
-        label: const Text('Nuevo', style: TextStyle(fontSize: 17)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: FilledButton.icon(
+              onPressed: () => _agregarCliente(context, ref),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                shape: const StadiumBorder(),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+              icon: const Icon(Icons.add),
+              label: const Text('Nuevo'),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -84,22 +93,26 @@ class ClientesScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _agregarCliente(BuildContext context, WidgetRef ref) {
-    return Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => ClienteFormScreen(
-          alGuardar: (datos) async {
-            await ref.read(clientesRepositoryProvider).crearCliente(datos);
-            // La primera llamada debe verse ya en Hoy y Agenda.
-            ref
-              ..invalidate(clientesProvider)
-              ..invalidate(pendientesHoyProvider)
-              ..invalidate(agendaProvider);
-          },
-        ),
+  Future<void> _agregarCliente(BuildContext context, WidgetRef ref) =>
+      abrirNuevoCliente(context, ref);
+}
+
+// Formulario de cliente nuevo; también se abre desde Hoy.
+Future<void> abrirNuevoCliente(BuildContext context, WidgetRef ref) {
+  return Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => ClienteFormScreen(
+        alGuardar: (datos) async {
+          await ref.read(clientesRepositoryProvider).crearCliente(datos);
+          // La primera llamada debe verse ya en Hoy y Agenda.
+          ref
+            ..invalidate(clientesProvider)
+            ..invalidate(pendientesHoyProvider)
+            ..invalidate(agendaProvider);
+        },
       ),
-    );
-  }
+    ),
+  );
 }
 
 // Búsqueda y mes de registro. Solo cambia el filtro; la lista reacciona sola.
@@ -129,9 +142,8 @@ class _BarraFiltrosState extends ConsumerState<_BarraFiltros> {
       if (_busqueda.text != nuevo.texto) _busqueda.text = nuevo.texto;
     });
 
-    return Container(
-      color: KusdyColors.superficie,
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: Column(
         children: [
           TextField(
@@ -151,14 +163,12 @@ class _BarraFiltrosState extends ConsumerState<_BarraFiltros> {
                         notifier.buscar('');
                       },
                     ),
-              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
           InputDecorator(
             decoration: const InputDecoration(
               labelText: 'Mes de registro',
-              border: OutlineInputBorder(),
               contentPadding: EdgeInsets.symmetric(horizontal: 12),
             ),
             child: DropdownButtonHideUnderline(
@@ -166,7 +176,11 @@ class _BarraFiltrosState extends ConsumerState<_BarraFiltros> {
                 key: const Key('filtro-mes'),
                 value: filtro.mes,
                 isExpanded: true,
-                style: const TextStyle(fontSize: 17, color: KusdyColors.texto),
+                style: const TextStyle(
+                  fontFamily: fuenteKusdy,
+                  fontSize: 17,
+                  color: KusdyColors.texto,
+                ),
                 onChanged: notifier.elegirMes,
                 items: [
                   const DropdownMenuItem(
@@ -198,9 +212,9 @@ class _ListaClientes extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       itemCount: clientes.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 12),
+      separatorBuilder: (_, _) => const SizedBox(height: 8),
       itemBuilder: (_, i) {
         final cliente = clientes[i];
         return Dismissible(
@@ -292,7 +306,7 @@ class _FondoEliminar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: KusdyColors.vencido,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
@@ -321,41 +335,69 @@ class _TarjetaCliente extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final producto = cliente.producto;
+    final estado = EstadoSeguimiento.de(cliente, DateTime.now());
 
     return Card(
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      color: KusdyColors.superficie,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: KusdyColors.borde),
-      ),
-      child: ListTile(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (_) => ClienteDetalleScreen(clienteId: cliente.id),
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: CircleAvatar(
-          backgroundColor: KusdyColors.primarioSuave,
-          foregroundColor: KusdyColors.primarioOscuro,
-          child: Text(cliente.nombre.characters.first),
-        ),
-        title: Text(
-          cliente.nombre,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          producto == null
-              ? cliente.telefono
-              : '${cliente.telefono} · $producto',
-          style: const TextStyle(
-            fontSize: 15,
-            color: KusdyColors.textoSecundario,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 23,
+                backgroundColor: KusdyColors.primarioSuave,
+                foregroundColor: KusdyColors.primarioOscuro,
+                child: Text(
+                  iniciales(cliente.nombre),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      cliente.nombre,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      producto == null
+                          ? cliente.telefono
+                          : '${cliente.telefono} · $producto',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: KusdyColors.textoSecundario,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    EtiquetaSeguimiento(estado: estado),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+// "María López" -> "ML"; "Hotel Los Altos" -> "HL".
+String iniciales(String nombre) {
+  final partes = nombre.trim().split(RegExp(r'\s+'));
+  return partes
+      .where((p) => p.isNotEmpty)
+      .take(2)
+      .map((p) => p.characters.first.toUpperCase())
+      .join();
 }
