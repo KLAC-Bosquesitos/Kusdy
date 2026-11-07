@@ -19,18 +19,18 @@ class FiltroAgendaNotifier extends Notifier<FiltroAgenda> {
   @override
   FiltroAgenda build() => FiltroAgenda(dia: soloDia(DateTime.now()));
 
-  void diaAnterior() => _irA(state.dia.subtract(const Duration(days: 1)));
+  void diaAnterior() => irA(state.dia.subtract(const Duration(days: 1)));
 
-  void diaSiguiente() => _irA(state.dia.add(const Duration(days: 1)));
+  void diaSiguiente() => irA(state.dia.add(const Duration(days: 1)));
 
-  void irAHoy() => _irA(DateTime.now());
+  void irAHoy() => irA(DateTime.now());
 
   void elegirTipo(TipoActividad? tipo) {
     state = FiltroAgenda(dia: state.dia, tipo: tipo);
   }
 
   // soloDia también corrige el cambio de horario: siempre queda a las 00:00.
-  void _irA(DateTime dia) {
+  void irA(DateTime dia) {
     state = FiltroAgenda(dia: soloDia(dia), tipo: state.tipo);
   }
 }

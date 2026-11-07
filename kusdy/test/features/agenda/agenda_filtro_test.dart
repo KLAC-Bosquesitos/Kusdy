@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kusdy/features/agenda/data/actividades_repository_falso.dart';
@@ -20,7 +21,13 @@ Future<void> abrirAgenda(WidgetTester tester) async {
           ActividadesRepositoryFalso(demora: Duration.zero),
         ),
       ],
-      child: const MaterialApp(home: AgendaScreen()),
+      // En español, como la app, para que el calendario use sus textos.
+      child: const MaterialApp(
+        locale: Locale('es'),
+        supportedLocales: [Locale('es')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        home: AgendaScreen(),
+      ),
     ),
   );
   await tester.pumpAndSettle();
@@ -71,6 +78,43 @@ void main() {
 
     await tester.tap(find.text('Ver todos los tipos'));
     await tester.pumpAndSettle();
+    expect(find.byType(Dismissible), findsNWidgets(4));
+  });
+
+  testWidgets('al elegir una fecha en el calendario, la lista cambia sola', (
+    tester,
+  ) async {
+    await abrirAgenda(tester);
+
+    await tester.tap(find.byTooltip('Elegir fecha'));
+    await tester.pumpAndSettle();
+    final manana = DateTime.now().add(const Duration(days: 1));
+    if (manana.day == 1) {
+      await tester.tap(find.byTooltip('Mes siguiente'));
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(
+      find.descendant(
+        of: find.byType(CalendarDatePicker),
+        matching: find.text('${manana.day}'),
+      ),
+    );
+    await tester.tap(find.text('Ir'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Mañana ·'), findsOne);
+    expect(find.byType(Dismissible), findsNWidgets(2));
+  });
+
+  testWidgets('cancelar el calendario deja el mismo día', (tester) async {
+    await abrirAgenda(tester);
+
+    await tester.tap(find.byTooltip('Elegir fecha'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancelar'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Hoy ·'), findsOne);
     expect(find.byType(Dismissible), findsNWidgets(4));
   });
 }
