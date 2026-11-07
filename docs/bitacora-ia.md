@@ -197,3 +197,22 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** La primera versión también limpiaba al salir y dejaba consultas pendientes en las pruebas; se dejó solo al entrar.
 - **Verificación:** prueba nueva `cambio_de_cuenta_test.dart` (falla sin el arreglo); `flutter analyze` sin observaciones; 87 pruebas en verde. Probado en el teléfono: cerrar sesión, entrar con la demo y Hoy carga sin cerrar la app.
 - **Commit / PR:** #42
+
+
+## 2026-11-06 · @chrisram21 — Diseño de pantallas aplicado a la app
+
+- **Herramienta:** Claude.
+- **Especificación:** Aplicar a la app los diseños del canvas "Kusdy pantallas" porque la UI actual es simple y confusa, sin cambiar funciones ni romper pruebas.
+- **Qué generó:** el tema global (letra, botones, chips, barra) y el nuevo estilo de Hoy, Clientes, Detalle, formulario, ¿Qué pasó?, Mover, Login y Más.
+- **Qué revisé:** que cada pantalla se vea como el diseño en el teléfono, `flutter analyze` y `flutter test` en verde.
+
+
+## 2026-11-06 · @chrisram21 — Botón flotante en Hoy, nota en las tarjetas, calendario en la primera llamada y ¿Qué pasó? con botones grandes
+
+- **Herramienta:** Claude.
+- **Especificación:** Hacer flotante el botón "Ingresar cliente" de Hoy para tenerlo siempre a la mano. En las tarjetas de Hoy y Agenda, quitar el número y mostrar la nota fija o, si no hay, el último comentario. En el formulario de cliente, poder elegir la primera llamada con calendario, como al reagendar. En ¿Qué pasó?, opciones más grandes que se colapsen al elegir una y que dejen cambiar la selección sin salir de la pantalla.
+- **Resultado:** Botón flotante en Hoy, tarjetas con nota fija o último comentario (traídos en la misma consulta de actividades, sin migración) y opción "Otra fecha" en el formulario, con el mismo calendario y reloj de Mover. En ¿Qué pasó?, 8 botones a todo el ancho que se colapsan en una franja con lo elegido y un botón "Cambiar" para volver a abrirlos.
+- **Aceptado:** Reusar `elegirFechaYHora` en vez de hacer otro selector. Recargar Hoy y Agenda al agregar un comentario o editar al cliente, para que la tarjeta no quede con el texto viejo. No repetir el comentario cuando es igual a la descripción de la actividad. Al cambiar el resultado se conservan el comentario y el producto; la fecha vuelve a la sugerida, salvo que se toque el mismo resultado. Mientras las opciones están abiertas no se muestra Guardar.
+- **Rechazado / corregido:** Las primeras pruebas del calendario fallaron por la prueba, no por la app (tocaban el chip antes de que terminara de moverse la pantalla y buscaban un ícono equivocado); se corrigieron. Queda por confirmar con Freddy el recorte a 2 líneas (la retro pedía 1) y que el último comentario no se vea cuando hay nota fija.
+- **Verificación:** `flutter analyze` sin observaciones; 101 pruebas en verde. Consulta nueva aceptada por Supabase, pero sin sesión no devolvió datos. Revisé el calendario y quedó bien. Falta probar en el teléfono las tarjetas con datos reales y ¿Qué pasó? (si las 8 opciones caben sin desplazar).
+- **Commit / PR:** #47.
