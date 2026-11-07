@@ -198,6 +198,15 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Verificación:** prueba nueva `cambio_de_cuenta_test.dart` (falla sin el arreglo); `flutter analyze` sin observaciones; 87 pruebas en verde. Probado en el teléfono: cerrar sesión, entrar con la demo y Hoy carga sin cerrar la app.
 - **Commit / PR:** #42
 
+## 2026-11-06 · @chrisram21 — Mejora en la pantalla de agenda
+
+- **Herramienta:** Claude.
+- **Especificación:** Añadir un componente de calendario dentro de la pantalla para poder navegar mejor adentro de ella.
+- **Resultado:** Un nuevo componente dentro de la pantalla agenda
+- **Aceptado:** La pantalla y los cambios dentro del codigo de las consultas.
+- **Rechazado / corregido:** EL desplazamiento uno por uno de las fechas
+- **Verificación:** flutter run. Y se probo de un solo la pantalla.
+- **Commit / PR:** #45
 
 ## 2026-11-06 · @chrisram21 — Diseño de pantallas aplicado a la app
 
@@ -216,3 +225,4 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** Las primeras pruebas del calendario fallaron por la prueba, no por la app (tocaban el chip antes de que terminara de moverse la pantalla y buscaban un ícono equivocado); se corrigieron. Queda por confirmar con Freddy el recorte a 2 líneas (la retro pedía 1) y que el último comentario no se vea cuando hay nota fija.
 - **Verificación:** `flutter analyze` sin observaciones; 101 pruebas en verde. Consulta nueva aceptada por Supabase, pero sin sesión no devolvió datos. Revisé el calendario y quedó bien. Falta probar en el teléfono las tarjetas con datos reales y ¿Qué pasó? (si las 8 opciones caben sin desplazar).
 - **Commit / PR:** #47.
+

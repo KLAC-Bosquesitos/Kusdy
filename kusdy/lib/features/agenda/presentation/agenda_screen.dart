@@ -22,11 +22,7 @@ class AgendaScreen extends ConsumerWidget {
     final filtro = ref.watch(filtroAgendaProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Agenda'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
-      ),
+      appBar: AppBar(title: const Text('Agenda')),
       body: Column(
         children: [
           const _BarraFiltros(),
@@ -81,8 +77,8 @@ class AgendaScreen extends ConsumerWidget {
   }
 }
 
-// Día ("< Hoy · jueves 22 de octubre >") y tipo. Solo cambia el filtro; la
-// lista reacciona sola.
+// Día ("< Hoy · jueves 22 de octubre >", la fecha abre el calendario) y tipo.
+// Solo cambia el filtro; la lista reacciona sola.
 class _BarraFiltros extends ConsumerWidget {
   const _BarraFiltros();
 
@@ -108,13 +104,40 @@ class _BarraFiltros extends ConsumerWidget {
               Expanded(
                 child: Column(
                   children: [
-                    Text(
-                      _nombreRelativo(filtro.dia),
-                      key: const Key('agenda-dia'),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: KusdyColors.texto,
+                    // Tocar la fecha abre el calendario.
+                    Tooltip(
+                      message: 'Elegir fecha',
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () => _elegirFecha(context, ref, filtro.dia),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.calendar_month_outlined,
+                                color: KusdyColors.primario,
+                              ),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  _nombreRelativo(filtro.dia),
+                                  key: const Key('agenda-dia'),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: KusdyColors.texto,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     if (!esHoy)
@@ -150,7 +173,8 @@ class _BarraFiltros extends ConsumerWidget {
                   key: const Key('filtro-tipo'),
                   value: filtro.tipo,
                   isExpanded: true,
-                  style: const TextStyle(
+                  // Del tema, para heredar la fuente de la app.
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontSize: 17,
                     color: KusdyColors.texto,
                   ),
@@ -171,6 +195,22 @@ class _BarraFiltros extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> _elegirFecha(
+  BuildContext context,
+  WidgetRef ref,
+  DateTime dia,
+) async {
+  final elegido = await showDatePicker(
+    context: context,
+    initialDate: dia,
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2100),
+    helpText: 'Ir a una fecha',
+    confirmText: 'Ir',
+  );
+  if (elegido != null) ref.read(filtroAgendaProvider.notifier).irA(elegido);
 }
 
 // "Hoy · jueves 22 de octubre", "Mañana · …", "Ayer · …" o solo la fecha.
