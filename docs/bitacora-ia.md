@@ -197,3 +197,14 @@ qué especificaste, qué revisaste y qué rechazaste.
 - **Rechazado / corregido:** La primera versión también limpiaba al salir y dejaba consultas pendientes en las pruebas; se dejó solo al entrar.
 - **Verificación:** prueba nueva `cambio_de_cuenta_test.dart` (falla sin el arreglo); `flutter analyze` sin observaciones; 87 pruebas en verde. Probado en el teléfono: cerrar sesión, entrar con la demo y Hoy carga sin cerrar la app.
 - **Commit / PR:** #42
+
+
+## 2026-11-06 · @chrisram21 — Mejora en la pantalla de agenda
+
+- **Herramienta:** Claude.
+- **Especificación:** Añadir un componente de calendario dentro de la pantalla para poder navegar mejor adentro de ella.
+- **Resultado:** Un nuevo componente dentro de la pantalla agenda
+- **Aceptado:** La pantalla y los cambios dentro del codigo de las consultas.
+- **Rechazado / corregido:** EL desplazamiento uno por uno de las fechas
+- **Verificación:** flutter run. Y se probo de un solo la pantalla.
+- **Commit / PR:** #45
