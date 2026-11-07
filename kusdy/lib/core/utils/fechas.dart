@@ -52,3 +52,18 @@ bool mismoDia(DateTime a, DateTime b) {
 // La fecha a las 00:00, para comparar y guardar días sin hora.
 DateTime soloDia(DateTime fecha) =>
     DateTime(fecha.year, fecha.month, fecha.day);
+
+// "viernes 6 de noviembre" -> "Viernes 6 de noviembre"
+String capitalizar(String texto) =>
+    texto.isEmpty ? texto : '${texto[0].toUpperCase()}${texto.substring(1)}';
+
+// "hoy", "ayer", "mañana" o "jueves 5 de noviembre".
+String diaCercano(DateTime fecha, DateTime ahora) {
+  final dias = soloDia(fecha).difference(soloDia(ahora)).inDays;
+  return switch (dias) {
+    0 => 'hoy',
+    -1 => 'ayer',
+    1 => 'mañana',
+    _ => diaLargo(fecha),
+  };
+}

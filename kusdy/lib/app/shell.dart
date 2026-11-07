@@ -34,8 +34,8 @@ class KusdyShell extends ConsumerWidget {
             ref.read(pestanaProvider.notifier).ir(Pestana.values[i]),
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.today_outlined),
-            selectedIcon: Icon(Icons.today),
+            icon: Icon(Icons.wb_sunny_outlined),
+            selectedIcon: Icon(Icons.wb_sunny),
             label: 'Hoy',
           ),
           NavigationDestination(

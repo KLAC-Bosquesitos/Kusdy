@@ -114,6 +114,8 @@ class ActividadesRepositoryFalso implements ActividadesRepository {
         tipo: registro.siguienteTipo ?? TipoActividad.llamada,
         programadaPara: fecha,
         descripcion: registro.comentario ?? '',
+        notaFija: actual.notaFija,
+        ultimoComentario: registro.comentario ?? actual.ultimoComentario,
       ),
     );
   }
@@ -150,6 +152,7 @@ List<ActividadAgenda> actividadesDeEjemplo([DateTime? hoy]) {
       tipo: TipoActividad.llamada,
       programadaPara: el(-1, 16, 0),
       descripcion: 'Preguntar si ya vio el catálogo',
+      ultimoComentario: 'Le interesa, pero quiere verlo con su esposo.',
     ),
     ActividadAgenda(
       id: 'a1',
@@ -159,6 +162,8 @@ List<ActividadAgenda> actividadesDeEjemplo([DateTime? hoy]) {
       tipo: TipoActividad.llamada,
       programadaPara: el(0, 9, 0),
       descripcion: 'Enviar cotización del calentador 200 L',
+      notaFija: 'Prefiere que la llamen después de las 5 p. m.',
+      ultimoComentario: 'Pidió la cotización por WhatsApp.',
     ),
     ActividadAgenda(
       id: 'a2',
@@ -205,6 +210,8 @@ List<ActividadAgenda> actividadesDeEjemplo([DateTime? hoy]) {
       tipo: TipoActividad.seguimiento,
       programadaPara: el(1, 14, 0),
       descripcion: 'Confirmar que recibió la cotización',
+      notaFija: 'Prefiere que la llamen después de las 5 p. m.',
+      ultimoComentario: 'Pidió la cotización por WhatsApp.',
     ),
   ];
 }

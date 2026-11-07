@@ -67,6 +67,69 @@ void main() {
     expect(guardados.single.productoInteresId, isNull);
   });
 
+  testWidgets('crear: Otra fecha elige día y hora con el calendario', (
+    tester,
+  ) async {
+    final guardados = await abrir(tester);
+    final h = DateTime.now();
+    final dia = DateTime(h.year, h.month, h.day + 10);
+
+    await tester.enterText(campo('Nombre *'), 'Lucía Ramírez');
+    await tester.enterText(campo('Teléfono *'), '44559012');
+    await tester.pumpAndSettle(); // Termina de mostrar el campo enfocado.
+    await tester.ensureVisible(find.text('Otra fecha'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Otra fecha'));
+    await tester.pumpAndSettle();
+
+    // Se escribe la fecha para no depender del mes que muestra el calendario.
+    await tester.tap(find.byIcon(Icons.edit_outlined));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.descendant(
+        of: find.byType(DatePickerDialog),
+        matching: find.byType(TextField),
+      ),
+      '${dia.month}/${dia.day}/${dia.year}',
+    );
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK')); // El reloj, con la hora propuesta.
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Llamada el'), findsOne);
+
+    await tester.ensureVisible(find.text('Guardar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Guardar'));
+    await tester.pumpAndSettle();
+
+    expect(
+      guardados.single.primeraLlamada,
+      DateTime(dia.year, dia.month, dia.day, 9),
+    );
+  });
+
+  testWidgets('crear: Sin agendar no crea la primera llamada', (tester) async {
+    final guardados = await abrir(tester);
+
+    await tester.enterText(campo('Nombre *'), 'Lucía Ramírez');
+    await tester.enterText(campo('Teléfono *'), '44559012');
+    await tester.pumpAndSettle(); // Termina de mostrar el campo enfocado.
+    await tester.ensureVisible(find.text('Sin agendar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sin agendar'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Llamada el'), findsNothing);
+
+    await tester.ensureVisible(find.text('Guardar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Guardar'));
+    await tester.pumpAndSettle();
+
+    expect(guardados.single.primeraLlamada, isNull);
+  });
+
   testWidgets('crear: el producto de interés es opcional', (tester) async {
     final guardados = await abrir(tester);
 

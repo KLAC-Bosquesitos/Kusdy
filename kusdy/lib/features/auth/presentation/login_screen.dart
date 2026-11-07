@@ -62,19 +62,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
-                    Icons.wb_sunny_outlined,
-                    size: 64,
-                    color: KusdyColors.acento,
+                  const Center(
+                    child: CircleAvatar(
+                      radius: 44,
+                      backgroundColor: KusdyColors.acentoSuave,
+                      child: Icon(
+                        Icons.wb_sunny,
+                        size: 52,
+                        color: KusdyColors.acento,
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   const Text(
                     'Kusdy',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 34,
                       fontWeight: FontWeight.w700,
-                      color: KusdyColors.primarioOscuro,
+                      color: KusdyColors.texto,
+                    ),
+                  ),
+                  const Text(
+                    'Tus clientes de Energica Solar',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: KusdyColors.textoSecundario,
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -87,7 +101,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     decoration: const InputDecoration(
                       labelText: 'Correo',
                       prefixIcon: Icon(Icons.mail_outline),
-                      border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -100,7 +113,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
                       prefixIcon: const Icon(Icons.lock_outline),
-                      border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         tooltip: _verContrasena
                             ? 'Ocultar contraseña'
@@ -130,7 +142,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: _ocupado ? null : _entrar,
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(56),
-                      textStyle: const TextStyle(fontSize: 18),
                     ),
                     child: _ocupado
                         ? const SizedBox.square(

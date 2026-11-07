@@ -41,6 +41,9 @@ void main() {
     expect(find.text('Pidió la cotización por WhatsApp.'), findsOne);
     expect(find.text('Quiere el de 200 L, espera la quincena.'), findsNothing);
 
+    // Los datos del cliente ocupan más alto: los comentarios quedan abajo.
+    await tester.ensureVisible(find.text('Ver todos (2)'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Ver todos (2)'));
     await tester.pump();
     expect(find.text('Quiere el de 200 L, espera la quincena.'), findsOne);

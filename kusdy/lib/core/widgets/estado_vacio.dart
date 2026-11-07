@@ -46,10 +46,7 @@ class EstadoVacio extends StatelessWidget {
               onPressed: onAccion,
               icon: Icon(iconoAccion),
               label: Text(textoAccion),
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(200, 52),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
+              style: FilledButton.styleFrom(minimumSize: const Size(200, 52)),
             ),
           ],
         ),

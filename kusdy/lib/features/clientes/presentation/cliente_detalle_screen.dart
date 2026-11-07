@@ -6,12 +6,15 @@ import '../../../core/utils/fechas.dart';
 import '../../../core/utils/telefono.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
+import '../../agenda/presentation/agenda_providers.dart';
+import '../../hoy/presentation/hoy_providers.dart';
 import '../domain/cliente.dart';
 import '../domain/comentario.dart';
 import '../domain/datos_cliente.dart';
 import 'cliente_detalle_providers.dart';
 import 'cliente_form_screen.dart';
 import 'clientes_providers.dart';
+import 'etiqueta_seguimiento.dart';
 
 // HU-05 · Detalle del cliente con la tarjeta de Comentarios (pedido de Fredy:
 // el último comentario siempre a la vista).
@@ -27,14 +30,14 @@ class ClienteDetalleScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(cliente.value?.nombre ?? 'Cliente'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
         actions: [
           if (cliente.value case final c?)
-            IconButton(
-              tooltip: 'Editar',
-              icon: const Icon(Icons.edit_outlined),
-              onPressed: () => _editar(context, ref, c),
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: TextButton(
+                onPressed: () => _editar(context, ref, c),
+                child: const Text('Editar datos'),
+              ),
             ),
         ],
       ),
@@ -46,13 +49,21 @@ class ClienteDetalleScreen extends ConsumerWidget {
               : 'No pudimos cargar al cliente.\nRevisa tu conexión a internet.',
           onReintentar: () => ref.invalidate(clienteProvider(clienteId)),
         ),
-        data: (c) => ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _Datos(cliente: c),
-            const SizedBox(height: 16),
-            _Comentarios(clienteId: c.id),
-          ],
+        data: (c) => SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Datos(cliente: c),
+              const SizedBox(height: 20),
+              const Text(
+                'Comentarios',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 10),
+              _Comentarios(clienteId: c.id),
+            ],
+          ),
         ),
       ),
     );
@@ -69,7 +80,10 @@ class ClienteDetalleScreen extends ConsumerWidget {
                 .actualizarCliente(c.id, datos);
             ref
               ..invalidate(clienteProvider(c.id))
-              ..invalidate(clientesProvider);
+              ..invalidate(clientesProvider)
+              // Las tarjetas muestran la nota fija y el nombre del cliente.
+              ..invalidate(pendientesHoyProvider)
+              ..invalidate(agendaProvider);
           },
         ),
       ),
@@ -89,13 +103,21 @@ class _Datos extends StatelessWidget {
     final proxima = c.proximaLlamada;
     final ultimo = c.ultimoContacto;
 
-    return _Tarjeta(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          c.telefono,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 12),
+        if ([lugar, ?c.producto].where((t) => t.isNotEmpty).toList()
+            case final partes when partes.isNotEmpty)
+          Text(
+            partes.join(' · '),
+            style: const TextStyle(
+              fontSize: 17,
+              color: KusdyColors.textoSecundario,
+            ),
+          ),
+        const SizedBox(height: 8),
+        EtiquetaSeguimiento(estado: EstadoSeguimiento.de(c, DateTime.now())),
+        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
@@ -103,16 +125,14 @@ class _Datos extends StatelessWidget {
                 onPressed: () => llamar(c.telefono),
                 icon: const Icon(Icons.call),
                 label: const Text('Llamar'),
-                style: _botonGrande,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: () => abrirWhatsApp(c.telefono),
                 icon: const Icon(Icons.chat_outlined),
                 label: const Text('WhatsApp'),
-                style: _botonGrande,
               ),
             ),
           ],
@@ -128,34 +148,30 @@ class _Datos extends StatelessWidget {
           const SizedBox(height: 12),
           _Aviso(texto: nota, color: KusdyColors.avisoSuave),
         ],
-        const SizedBox(height: 8),
-        if (lugar.isNotEmpty) _Dato(icono: Icons.place_outlined, texto: lugar),
-        if (c.producto case final p?)
-          _Dato(icono: Icons.solar_power_outlined, texto: p),
-        _Dato(
-          icono: Icons.event_outlined,
-          texto: proxima == null
-              ? 'Sin llamada agendada'
-              : 'Próxima: ${diaLargo(proxima)}, ${hora(proxima)}',
-        ),
-        if (ultimo != null)
-          _Dato(
-            icono: Icons.history,
-            texto: 'Último contacto: ${diaLargo(ultimo)}',
-          ),
-        _Dato(
-          icono: Icons.person_add_alt,
-          texto: 'Registrado: ${diaLargo(c.registradoEl)}',
+        const SizedBox(height: 16),
+        _Tarjeta(
+          children: [
+            _Dato(etiqueta: 'Teléfono', valor: c.telefono),
+            if (lugar.isNotEmpty) _Dato(etiqueta: 'Dirección', valor: lugar),
+            if (c.producto case final p?) _Dato(etiqueta: 'Producto', valor: p),
+            _Dato(
+              etiqueta: 'Próxima llamada',
+              valor: proxima == null
+                  ? 'Sin agendar'
+                  : '${diaCercano(proxima, DateTime.now())}, ${hora(proxima)}',
+            ),
+            if (ultimo != null)
+              _Dato(
+                etiqueta: 'Último contacto',
+                valor: diaCercano(ultimo, DateTime.now()),
+              ),
+            _Dato(etiqueta: 'Registrado', valor: diaLargo(c.registradoEl)),
+          ],
         ),
       ],
     );
   }
 }
-
-final _botonGrande = ButtonStyle(
-  minimumSize: WidgetStateProperty.all(const Size.fromHeight(52)),
-  textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 17)),
-);
 
 class _Comentarios extends ConsumerStatefulWidget {
   const _Comentarios({required this.clienteId});
@@ -187,7 +203,11 @@ class _ComentariosState extends ConsumerState<_Comentarios> {
           .read(comentariosRepositoryProvider)
           .agregarComentario(widget.clienteId, texto);
       _texto.clear();
-      ref.invalidate(comentariosProvider(widget.clienteId));
+      ref
+        ..invalidate(comentariosProvider(widget.clienteId))
+        // Las tarjetas muestran el último comentario.
+        ..invalidate(pendientesHoyProvider)
+        ..invalidate(agendaProvider);
     } catch (_) {
       aviso.showSnackBar(
         const SnackBar(
@@ -205,11 +225,6 @@ class _ComentariosState extends ConsumerState<_Comentarios> {
 
     return _Tarjeta(
       children: [
-        const Text(
-          'Comentarios',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 8),
         comentarios.when(
           skipLoadingOnReload: true,
           loading: () => const Padding(
@@ -270,7 +285,6 @@ class _ComentariosState extends ConsumerState<_Comentarios> {
           style: const TextStyle(fontSize: 17),
           decoration: InputDecoration(
             hintText: 'Escribe un comentario',
-            border: const OutlineInputBorder(),
             suffixIcon: _enviando
                 ? const Padding(
                     padding: EdgeInsets.all(12),
@@ -326,13 +340,6 @@ class _Tarjeta extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      color: KusdyColors.superficie,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: KusdyColors.borde),
-      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -345,20 +352,33 @@ class _Tarjeta extends StatelessWidget {
 }
 
 class _Dato extends StatelessWidget {
-  const _Dato({required this.icono, required this.texto});
+  const _Dato({required this.etiqueta, required this.valor});
 
-  final IconData icono;
-  final String texto;
+  final String etiqueta;
+  final String valor;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icono, size: 20, color: KusdyColors.textoSecundario),
-          const SizedBox(width: 8),
-          Expanded(child: Text(texto, style: const TextStyle(fontSize: 16))),
+          Text(
+            etiqueta,
+            style: const TextStyle(
+              fontSize: 16,
+              color: KusdyColors.textoSecundario,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              capitalizar(valor),
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+          ),
         ],
       ),
     );
@@ -378,7 +398,7 @@ class _Aviso extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Text(texto, style: const TextStyle(fontSize: 16)),
     );

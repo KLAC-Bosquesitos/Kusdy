@@ -16,7 +16,10 @@ class ActividadesRepositorySupabase implements ActividadesRepository {
   // !inner: si el cliente fue eliminado, su actividad no se trae.
   static const _columnas =
       'id, cliente_id, tipo, estado, programada_para, nota, '
-      'cliente:clientes!inner(nombre, telefono, eliminado_en)';
+      'cliente:clientes!inner(nombre, telefono, nota_fija, eliminado_en, '
+      'comentarios(texto, creado_en))';
+
+  static const _comentarios = 'cliente.comentarios';
 
   String get _yo => _db.auth.currentUser!.id;
 
@@ -24,14 +27,15 @@ class ActividadesRepositorySupabase implements ActividadesRepository {
   Future<List<ActividadAgenda>> pendientesDeHoy() {
     return _leer(() {
       final (_, manana) = rangoDelDia(DateTime.now());
-      return _db
-          .from('actividades')
-          .select(_columnas)
-          .eq('usuario_id', _yo)
-          .eq('estado', 'pendiente')
-          .isFilter('cliente.eliminado_en', null)
-          .lt('programada_para', manana.toIso8601String())
-          .order('programada_para');
+      return _porHora(
+        _db
+            .from('actividades')
+            .select(_columnas)
+            .eq('usuario_id', _yo)
+            .eq('estado', 'pendiente')
+            .isFilter('cliente.eliminado_en', null)
+            .lt('programada_para', manana.toIso8601String()),
+      );
     });
   }
 
@@ -49,7 +53,7 @@ class ActividadesRepositorySupabase implements ActividadesRepository {
           .lt('programada_para', hasta.toIso8601String());
       final tipo = filtro.tipo;
       if (tipo != null) consulta = consulta.eq('tipo', tipo.name);
-      return consulta.order('programada_para');
+      return _porHora(consulta);
     });
   }
 
@@ -77,6 +81,16 @@ class ActividadesRepositorySupabase implements ActividadesRepository {
     } catch (_) {
       throw const ActividadException(sinConexion);
     }
+  }
+
+  // Por hora y, de cada cliente, solo su comentario más reciente.
+  PostgrestTransformBuilder<PostgrestList> _porHora(
+    PostgrestFilterBuilder<PostgrestList> consulta,
+  ) {
+    return consulta
+        .order('programada_para')
+        .order('creado_en', ascending: false, referencedTable: _comentarios)
+        .limit(1, referencedTable: _comentarios);
   }
 
   Future<List<ActividadAgenda>> _leer(
@@ -161,6 +175,7 @@ ActividadAgenda actividadDesdeFila(
   Map<String, int> intentos = const {},
 ]) {
   final cliente = f['cliente'] as Map<String, dynamic>;
+  final comentarios = cliente['comentarios'] as List<dynamic>? ?? const [];
   return ActividadAgenda(
     id: f['id'] as String,
     clienteId: f['cliente_id'] as String,
@@ -171,5 +186,9 @@ ActividadAgenda actividadDesdeFila(
     programadaPara: DateTime.parse(f['programada_para'] as String).toLocal(),
     descripcion: f['nota'] as String? ?? '',
     intentosSinRespuesta: intentos[f['cliente_id']] ?? 0,
+    notaFija: cliente['nota_fija'] as String?,
+    ultimoComentario: comentarios.isEmpty
+        ? null
+        : (comentarios.first as Map<String, dynamic>)['texto'] as String,
   );
 }

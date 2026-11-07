@@ -149,6 +149,84 @@ void main() {
     expect(repositorio.registros.single.siguienteFecha, isNull);
   });
 
+  testWidgets('al entrar, cada resultado es un botón grande', (tester) async {
+    await tester.pumpWidget(hoyCon(RepositorioEspia()));
+    await tester.pumpAndSettle();
+
+    await hecho(tester, 'María López');
+
+    for (final r in ResultadoLlamada.values) {
+      final boton = find.ancestor(
+        of: find.text(r.texto),
+        matching: find.byType(OutlinedButton),
+      );
+      expect(tester.getSize(boton).height, greaterThanOrEqualTo(64));
+    }
+    expect(find.text('Guardar'), findsNothing);
+  });
+
+  testWidgets('elegir colapsa los botones y deja solo el elegido', (
+    tester,
+  ) async {
+    await tester.pumpWidget(hoyCon(RepositorioEspia()));
+    await tester.pumpAndSettle();
+
+    await hecho(tester, 'María López');
+    await tocar(tester, 'No contestó');
+
+    expect(find.text('No contestó'), findsOne);
+    expect(find.text('Le interesa'), findsNothing);
+    expect(find.text('Cambiar'), findsOne);
+    expect(find.text('Guardar'), findsOne);
+  });
+
+  testWidgets('Cambiar corrige el resultado sin perder el comentario', (
+    tester,
+  ) async {
+    final repositorio = RepositorioEspia();
+    await tester.pumpWidget(hoyCon(repositorio));
+    await tester.pumpAndSettle();
+
+    await hecho(tester, 'María López');
+    await tocar(tester, 'No contestó');
+    await tester.enterText(
+      find.byKey(const Key('comentario-llamada')),
+      'Quiere el de 200 L',
+    );
+    await tester.pumpAndSettle();
+
+    await tocar(tester, 'Cambiar');
+    expect(find.text('Guardar'), findsNothing);
+    expect(find.text('¿Cuándo vuelves a llamar?'), findsNothing);
+
+    await tocar(tester, 'Le interesa');
+    expect(find.text('¿Cuándo le das seguimiento?'), findsOne);
+    await tocar(tester, 'Guardar');
+
+    final r = repositorio.registros.single;
+    expect(r.resultado, ResultadoLlamada.interesado);
+    expect(r.comentario, 'Quiere el de 200 L');
+  });
+
+  testWidgets('tocar el mismo resultado conserva la fecha elegida', (
+    tester,
+  ) async {
+    final repositorio = RepositorioEspia();
+    await tester.pumpWidget(hoyCon(repositorio));
+    await tester.pumpAndSettle();
+
+    await hecho(tester, 'María López');
+    await tocar(tester, 'No contestó');
+    await tocar(tester, 'En 1 semana');
+    await tocar(tester, 'Cambiar');
+    await tocar(tester, 'No contestó');
+    await tocar(tester, 'Guardar');
+
+    final enUnaSemana = DateTime.now().add(const Duration(days: 7));
+    final fecha = repositorio.registros.single.siguienteFecha!;
+    expect(mismoDia(fecha, enUnaSemana), isTrue);
+  });
+
   testWidgets('avisa cuando van 3 llamadas sin respuesta', (tester) async {
     await tester.pumpWidget(hoyCon(RepositorioEspia()));
     await tester.pumpAndSettle();

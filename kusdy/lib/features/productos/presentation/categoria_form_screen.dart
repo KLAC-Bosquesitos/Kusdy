@@ -97,8 +97,6 @@ class _CategoriaFormScreenState extends State<CategoriaFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_editando ? 'Editar categoría' : 'Nueva categoría'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
       ),
       body: ListView(
         padding: const EdgeInsets.all(24),
@@ -111,7 +109,6 @@ class _CategoriaFormScreenState extends State<CategoriaFormScreen> {
             decoration: const InputDecoration(
               labelText: 'Nombre',
               hintText: 'Ej. Paneles solares',
-              border: OutlineInputBorder(),
             ),
           ),
           if (inicial != null) ...[
@@ -153,7 +150,6 @@ class _CategoriaFormScreenState extends State<CategoriaFormScreen> {
                 : null,
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(56),
-              textStyle: const TextStyle(fontSize: 18),
             ),
             child: Text(_editando ? 'Guardar cambios' : 'Crear'),
           ),
@@ -170,7 +166,6 @@ class _CategoriaFormScreenState extends State<CategoriaFormScreen> {
                     ),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(52),
-                textStyle: const TextStyle(fontSize: 18),
               ),
               child: Text(inicial.archivada ? 'Restaurar' : 'Archivar'),
             ),
@@ -182,7 +177,6 @@ class _CategoriaFormScreenState extends State<CategoriaFormScreen> {
               style: TextButton.styleFrom(
                 foregroundColor: KusdyColors.vencido,
                 minimumSize: const Size.fromHeight(52),
-                textStyle: const TextStyle(fontSize: 18),
               ),
               child: const Text('Eliminar'),
             ),

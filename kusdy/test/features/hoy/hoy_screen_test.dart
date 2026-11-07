@@ -61,7 +61,30 @@ void main() {
     lectura.complete(actividadesDeEjemplo());
     await tester.pumpAndSettle();
 
+    // Las tarjetas son altas: la última queda abajo de la pantalla.
+    await tester.scrollUntilVisible(find.text('Hotel Los Altos'), 200);
     expect(find.text('Hotel Los Altos'), findsOne);
+  });
+
+  testWidgets('Ingresar cliente flota sobre la lista, sin desplazarla', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      pantallaCon(HoyDePrueba(() async => actividadesDeEjemplo())),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FloatingActionButton), findsOne);
+    expect(find.text('Ingresar cliente').hitTestable(), findsOne);
+  });
+
+  testWidgets('Ingresar cliente también está si no hay pendientes', (
+    tester,
+  ) async {
+    await tester.pumpWidget(pantallaCon(HoyDePrueba(() async => [])));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Ingresar cliente'), findsOne);
   });
 
   testWidgets('vacío: ofrece ver todos los clientes', (tester) async {
