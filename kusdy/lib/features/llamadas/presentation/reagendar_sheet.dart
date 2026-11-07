@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/theme.dart';
 import '../../../core/utils/fechas.dart';
 import '../domain/opciones_resultado.dart';
 
 // Boceto 4 · Mover: atajos de fecha y, si hace falta, el calendario.
 // Devuelve la fecha nueva o null si se cerró sin elegir.
 Future<DateTime?> elegirNuevaFecha(BuildContext context, DateTime actual) {
+  final ahora = DateTime.now();
+  final vencida = soloDia(actual).isBefore(soloDia(ahora));
   return showModalBottomSheet<DateTime>(
     context: context,
     showDragHandle: true,
@@ -18,27 +21,52 @@ Future<DateTime?> elegirNuevaFecha(BuildContext context, DateTime actual) {
           children: [
             const Text(
               'Mover para…',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 12),
-            for (final (dias, texto) in atajosDeFecha)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
-                    textStyle: const TextStyle(fontSize: 17),
-                  ),
-                  onPressed: () => Navigator.of(
-                    contexto,
-                  ).pop(fechaConAtajo(dias, DateTime.now(), horaDe: actual)),
-                  child: Text(texto),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: vencida
+                    ? KusdyColors.vencidoSuave
+                    : KusdyColors.primarioSuave,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Estaba para ${diaCercano(actual, ahora)} a las ${hora(actual)}',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: vencida
+                      ? KusdyColors.vencido
+                      : KusdyColors.primarioOscuro,
                 ),
               ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                for (final (i, (dias, texto)) in atajosDeFecha.indexed) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(54),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                      ),
+                      onPressed: () => Navigator.of(contexto).pop(
+                        fechaConAtajo(dias, DateTime.now(), horaDe: actual),
+                      ),
+                      child: Text(texto, textAlign: TextAlign.center),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 8),
             FilledButton.icon(
               style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(52),
-                textStyle: const TextStyle(fontSize: 17),
+                minimumSize: const Size.fromHeight(54),
               ),
               icon: const Icon(Icons.calendar_month),
               label: const Text('Otra fecha'),
