@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/pestana.dart';
 import '../../../app/theme.dart';
+import '../../../core/utils/fechas.dart';
 import '../../../core/widgets/estado_cargando.dart';
 import '../../../core/widgets/estado_error.dart';
 import '../../../core/widgets/estado_vacio.dart';
 import '../../agenda/domain/actividad_agenda.dart';
+import '../../clientes/presentation/clientes_screen.dart';
 import '../../llamadas/presentation/tarjeta_actividad.dart';
 import 'hoy_providers.dart';
 
@@ -21,9 +23,21 @@ class HoyScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clientes para hoy'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
+        toolbarHeight: 84,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              capitalizar(diaLargo(DateTime.now())),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: KusdyColors.textoSecundario,
+              ),
+            ),
+            const Text('Clientes para hoy'),
+          ],
+        ),
         actions: [
           IconButton(
             tooltip: 'Ver todos los clientes',
@@ -31,6 +45,12 @@ class HoyScreen extends ConsumerWidget {
             onPressed: () => _verClientes(ref),
           ),
         ],
+      ),
+      // Flotante: siempre a la mano, aunque la lista sea larga.
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => abrirNuevoCliente(context, ref),
+        icon: const Icon(Icons.person_add_alt_1),
+        label: const Text('Ingresar cliente'),
       ),
       body: pendientes.when(
         loading: () => const EstadoCargando(mensaje: 'Revisando tu día…'),
@@ -74,18 +94,20 @@ class _ListaPendientes extends StatelessWidget {
     final deHoy = pendientes.where((a) => !a.vencida(ahora)).toList();
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      // Abajo deja espacio para que el botón flotante no tape la última tarjeta.
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
       children: [
         if (vencidas.isNotEmpty) ...[
           _Titulo(
             'Se te pasaron (${vencidas.length})',
             color: KusdyColors.vencido,
+            icono: Icons.error_outline,
           ),
           for (final a in vencidas)
             _conEspacio(TarjetaActividad(actividad: a, conFecha: true)),
           const SizedBox(height: 8),
         ],
-        _Titulo('Hoy (${deHoy.length})', color: KusdyColors.primarioOscuro),
+        _Titulo('Hoy (${deHoy.length})', color: KusdyColors.texto),
         if (deHoy.isEmpty)
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
@@ -107,22 +129,31 @@ class _ListaPendientes extends StatelessWidget {
 }
 
 class _Titulo extends StatelessWidget {
-  const _Titulo(this.texto, {required this.color});
+  const _Titulo(this.texto, {required this.color, this.icono});
 
   final String texto;
   final Color color;
+  final IconData? icono;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        texto,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-          color: color,
-        ),
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          if (icono != null) ...[
+            Icon(icono, color: color, size: 22),
+            const SizedBox(width: 8),
+          ],
+          Text(
+            texto,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }

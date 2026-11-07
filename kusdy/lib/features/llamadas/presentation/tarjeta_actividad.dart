@@ -28,88 +28,127 @@ class TarjetaActividad extends ConsumerWidget {
     final a = actividad;
     final vencida = a.vencida(DateTime.now());
     final cuando = conFecha
-        ? '${diaLargo(a.programadaPara)}, ${hora(a.programadaPara)}'
+        ? '${diaCercano(a.programadaPara, DateTime.now())}, ${hora(a.programadaPara)}'
         : hora(a.programadaPara);
+    // La nota fija manda; sin ella, el último comentario.
+    final nota = _conTexto(a.notaFija);
+    final comentario = nota == null ? _conTexto(a.ultimoComentario) : null;
+    // El comentario de una llamada también queda como nota de la siguiente
+    // actividad: no se repite el mismo texto dos veces.
+    final descripcion = _conTexto(a.descripcion);
+    final conDescripcion = descripcion != null && descripcion != comentario;
 
     return Card(
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      color: KusdyColors.superficie,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: vencida ? KusdyColors.vencido : KusdyColors.borde,
-        ),
+        borderRadius: BorderRadius.circular(16),
+        side: vencida
+            ? const BorderSide(color: KusdyColors.vencidoBorde, width: 1.5)
+            : BorderSide.none,
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 8, 8),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '$cuando · ${a.tipo.texto}',
+              '${vencida ? 'Vencía ' : ''}$cuando · ${a.tipo.texto}',
               style: TextStyle(
                 fontSize: 15,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: vencida ? KusdyColors.vencido : KusdyColors.primario,
               ),
             ),
-            const SizedBox(height: 4),
             // Tocar el nombre abre el detalle: qué se habló la última vez.
             InkWell(
+              borderRadius: BorderRadius.circular(8),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder: (_) => ClienteDetalleScreen(clienteId: a.clienteId),
                 ),
               ),
-              child: Text(
-                a.cliente,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: KusdyColors.primarioOscuro,
-                  decoration: TextDecoration.underline,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        a.cliente,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: KusdyColors.texto,
+                        ),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: KusdyColors.textoSecundario,
+                    ),
+                  ],
                 ),
               ),
             ),
-            Text(
-              [
-                if (a.descripcion.isNotEmpty) a.descripcion,
-                a.telefono,
-              ].join('\n'),
-              style: const TextStyle(
-                fontSize: 15,
-                color: KusdyColors.textoSecundario,
+            if (conDescripcion)
+              Text(
+                descripcion,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: KusdyColors.textoSecundario,
+                ),
               ),
-            ),
+            if (nota != null)
+              _NotaDelCliente(icono: Icons.push_pin_outlined, texto: nota)
+            else if (comentario != null)
+              _NotaDelCliente(
+                icono: Icons.chat_bubble_outline,
+                texto: comentario,
+              ),
+            const SizedBox(height: 12),
             if (a.estado == EstadoActividad.pendiente)
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton.icon(
-                    onPressed: () => llamar(a.telefono),
-                    icon: const Icon(Icons.call),
-                    label: const Text('Llamar'),
+                  Expanded(
+                    child: FilledButton.icon(
+                      style: _compacto,
+                      onPressed: () => llamar(a.telefono),
+                      icon: const Icon(Icons.call),
+                      label: const Text('Llamar'),
+                    ),
                   ),
-                  TextButton.icon(
-                    onPressed: () => _mover(context, ref),
-                    icon: const Icon(Icons.schedule),
-                    label: const Text('Mover'),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      style: _compacto,
+                      onPressed: () => _hecho(context),
+                      icon: const Icon(Icons.check),
+                      label: const Text('Hecho'),
+                    ),
                   ),
-                  FilledButton.icon(
-                    onPressed: () => _hecho(context),
-                    icon: const Icon(Icons.check),
-                    label: const Text('Hecho'),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      style: _compacto,
+                      onPressed: () => _mover(context, ref),
+                      icon: const Icon(Icons.event_outlined),
+                      label: const Text('Mover'),
+                    ),
                   ),
                 ],
               )
             else
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  'Hecha',
-                  style: TextStyle(fontSize: 15, color: KusdyColors.exito),
-                ),
+              const Row(
+                children: [
+                  Icon(Icons.check_circle, size: 20, color: KusdyColors.exito),
+                  SizedBox(width: 6),
+                  Text(
+                    'Hecha',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: KusdyColors.exito,
+                    ),
+                  ),
+                ],
               ),
           ],
         ),
@@ -147,3 +186,45 @@ class TarjetaActividad extends ConsumerWidget {
     }
   }
 }
+
+String? _conTexto(String? texto) {
+  final limpio = texto?.trim() ?? '';
+  return limpio.isEmpty ? null : limpio;
+}
+
+// Nota fija (chincheta) o último comentario (globo). Va recortada a dos líneas
+// para que la tarjeta no crezca; el texto completo está en el detalle.
+class _NotaDelCliente extends StatelessWidget {
+  const _NotaDelCliente({required this.icono, required this.texto});
+
+  final IconData icono;
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icono, size: 20, color: KusdyColors.textoSecundario),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              texto,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 16, color: KusdyColors.texto),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Tres botones en una fila: menos relleno para que quepan en pantallas chicas.
+const _compacto = ButtonStyle(
+  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 4)),
+  iconSize: WidgetStatePropertyAll(20),
+);
