@@ -28,6 +28,8 @@ class ActividadAgenda {
     required this.descripcion,
     this.estado = EstadoActividad.pendiente,
     this.intentosSinRespuesta = 0,
+    this.notaFija,
+    this.ultimoComentario,
   });
 
   final String id;
@@ -41,6 +43,10 @@ class ActividadAgenda {
 
   // Llamadas seguidas sin respuesta del cliente (aviso a partir de 3).
   final int intentosSinRespuesta;
+
+  // Del cliente: lo que conviene tener presente antes de llamarle.
+  final String? notaFija;
+  final String? ultimoComentario;
 
   // Pendiente de un día anterior: va en "Se te pasaron".
   bool vencida(DateTime ahora) =>
@@ -58,6 +64,8 @@ class ActividadAgenda {
       descripcion: descripcion,
       estado: estado ?? this.estado,
       intentosSinRespuesta: intentosSinRespuesta,
+      notaFija: notaFija,
+      ultimoComentario: ultimoComentario,
     );
   }
 }

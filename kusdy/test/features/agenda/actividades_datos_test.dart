@@ -27,6 +27,28 @@ void main() {
     expect(a.programadaPara, DateTime.utc(2026, 11, 4, 1).toLocal());
   });
 
+  test('actividadDesdeFila lee la nota fija y el último comentario', () {
+    final a = actividadDesdeFila({
+      'id': 'a1',
+      'cliente_id': 'c1',
+      'tipo': 'llamada',
+      'estado': 'pendiente',
+      'programada_para': '2026-11-04T01:00:00+00:00',
+      'nota': null,
+      'cliente': {
+        'nombre': 'María López',
+        'telefono': '5512 3456',
+        'nota_fija': 'Después de las 5',
+        'comentarios': [
+          {'texto': 'Espera la quincena', 'creado_en': '2026-11-03T01:00:00Z'},
+        ],
+      },
+    });
+
+    expect(a.notaFija, 'Después de las 5');
+    expect(a.ultimoComentario, 'Espera la quincena');
+  });
+
   test('rangoDelDia va de las 00:00 a las 00:00 del día siguiente', () {
     final (desde, hasta) = rangoDelDia(DateTime(2026, 11, 3, 19, 30));
 
