@@ -44,9 +44,12 @@ class SelectorProducto extends ConsumerWidget {
         isExpanded: true,
         decoration: const InputDecoration(
           labelText: 'Producto de interés (opcional)',
-          border: OutlineInputBorder(),
         ),
-        style: const TextStyle(fontSize: 17, color: KusdyColors.texto),
+        style: const TextStyle(
+          fontFamily: fuenteKusdy,
+          fontSize: 17,
+          color: KusdyColors.texto,
+        ),
         items: [
           DropdownMenuItem(value: null, child: Text(textoNinguno)),
           for (final p in lista)

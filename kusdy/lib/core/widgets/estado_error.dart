@@ -38,10 +38,7 @@ class EstadoError extends StatelessWidget {
               onPressed: onReintentar,
               icon: const Icon(Icons.refresh),
               label: const Text('Reintentar'),
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(180, 52),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
+              style: FilledButton.styleFrom(minimumSize: const Size(180, 52)),
             ),
           ],
         ),

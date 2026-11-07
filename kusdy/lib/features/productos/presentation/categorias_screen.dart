@@ -21,11 +21,7 @@ class CategoriasScreen extends ConsumerWidget {
     final categorias = ref.watch(categoriasProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categorías de productos'),
-        backgroundColor: KusdyColors.superficie,
-        foregroundColor: KusdyColors.primarioOscuro,
-      ),
+      appBar: AppBar(title: const Text('Categorías de productos')),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => abrirFormulario(context, ref),
         icon: const Icon(Icons.add),
